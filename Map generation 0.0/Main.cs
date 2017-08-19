@@ -4,23 +4,23 @@ using System.Runtime.InteropServices;
 namespace MapGeneration0_0
 {
 
-	static class Program
+	public static class Program
     {
-		private enum output { Console, WPF }
-		private static output Output = output.Console;
-		public static Random R;
+		internal static Random R;
+
 		public static void Main()
 		{
 			R = new Random();
-			int width = 20, height = 20;
-			draw(GenerateMap(Tile.topology.square, width, height));
-			draw(GenerateMap(Tile.topology.hexagon, width, height));
-			draw(GenerateMap(Tile.topology.triangle, width, height));
+			int width = 8, height = 8;
+
+			Console.WriteLine(GenerateMap(Tile.topology.square, width, height));
+			Console.WriteLine(GenerateMap(Tile.topology.hexagon, width, height));
+			Console.WriteLine(GenerateMap(Tile.topology.triangle, width, height));
 
 			Console.ReadKey();
 		}
 
-		private static MapTiles GenerateMap(Tile.topology topology, int width, int height)
+		public static MapTiles GenerateMap(Tile.topology topology, int width, int height)
 		{
 			MapTiles mt = new MapTiles(topology, width, height);
 			ProvinceTile P = new ProvinceTile(mt, 1);
@@ -34,18 +34,6 @@ namespace MapGeneration0_0
 			P = new ProvinceTile(mt, 9);
 
 			return mt;
-		}
-		private static void draw(MapTiles mt)
-		{
-			switch (Output)
-			{
-				case output.Console:
-					Console.WriteLine(mt);
-					break;
-				case output.WPF:
-					break;
-			}
-
 		}
     }
 }

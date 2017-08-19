@@ -1,12 +1,13 @@
 ﻿using System;
 
-namespace EU0._0
+namespace EU0
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Hello EU0!");
+			Console.ReadKey();
         }
     }
 }

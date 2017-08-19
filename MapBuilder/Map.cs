@@ -1,24 +1,39 @@
 ﻿using System.Linq;
+using System;
 
-namespace MapGeneration0_0
+namespace MapBuilder
 {
-	public class MapTiles
+	public class Map
 	{
+		public static Random R;
 		public enum topology { square, cilinder, sphere, torus }
 		public readonly Tile[,] Tiles;
 		public readonly topology MapTopology;
+		public readonly bool regular = true;
+		public Province[] Provinces;
 
-		public MapTiles(Tile.topology topology, int x, int y)
+		internal Map(Tile.topology topology, int x, int y, int provinces = 0, Random r = null)
 		{
-			MapTopology = MapTiles.topology.square;
+			if (provinces == 0)
+				provinces = x;
+			R = r ?? new Random();
+			MapTopology = Map.topology.square;
 			Tiles = new Tile[x, y];
 			for (x = 0; x < Tiles.GetLength(0); x++)
 				for (y = 0; y < Tiles.GetLength(1); y++)
-					Tiles[x, y] = new Tile(topology, 1 + x + y * Tiles.GetLength(0));
+					Tiles[x, y] = new Tile(topology, x, y,1 + x + y * Tiles.GetLength(0));
 			for (x = 0; x < Tiles.GetLength(0); x++)
 				for (y = 0; y < Tiles.GetLength(1); y++)
 					for (int n = 0; n < Tiles[x, y].Neighbours.Length; n++)
 						Tiles[x, y].Neighbours[n] = GetNeighbour(x, y, n);
+			Provinces = new Province[provinces];
+			for (int n = 0; n < provinces; n++)
+				Provinces[n] = new Province(this,x, n);
+		}
+
+		public static Map GenerateMap(Tile.topology topology, int width, int height, int provinces, Random r = null)
+		{
+			return new Map(topology, width, height, provinces, r);
 		}
 
 		private Tile GetNeighbour(int x, int y, int n)
@@ -202,38 +217,6 @@ namespace MapGeneration0_0
 					}
 			}
 			return s;
-		}
-	}
-
-	public class Tile
-	{
-		public enum topology { triangle, square, hexagon}
-		public Tile[] Neighbours;
-		public topology TileTopology;
-		public int Id;
-		public ProvinceTile Province;
-		public bool HasProvince { get { return Province != null; } }
-		
-		public Tile(topology topology, int id, Tile[] tiles=null)
-		{
-			Id = id;
-			TileTopology = topology;
-			Neighbours = TileTopology == topology.triangle ? new Tile[3] :
-						 TileTopology == topology.square ? new Tile[4] :
-						 TileTopology == topology.hexagon ? new Tile[6] : null;
-			
-			if (tiles != null)
-				for (int x = 0; x < Neighbours.Length; x++)
-					Neighbours[x] = tiles[x];
-		}
-
-		public override string ToString()
-		{
-			return Province == null ? 0.ToString() : Province.Id.ToString(); // Neighbours.Count(t => t.Id != 0).ToString();
-		}
-		public bool Equals(Tile tile)
-		{
-			return Id==tile.Id;
 		}
 	}
 }
