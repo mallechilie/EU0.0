@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System;
+using TerrainGeneration;
 
 namespace MapBuilder
 {
@@ -11,29 +12,46 @@ namespace MapBuilder
 		public readonly topology MapTopology;
 		public readonly bool regular = true;
 		public Province[] Provinces;
+		public Nation[] Nations;
 
-		internal Map(Tile.topology topology, int x, int y, int provinces = 0, Random r = null)
+		internal Map(Tile.topology topology, int x, int y, int provinces = 0, int nations = 0, Random r = null)
 		{
-			if (provinces == 0)
-				provinces = x;
 			R = r ?? new Random();
 			MapTopology = Map.topology.square;
+
 			Tiles = new Tile[x, y];
+			WaterGeneration GH = new WaterGeneration(new GenerateHeight(x, y, 3).HeightMap);
 			for (x = 0; x < Tiles.GetLength(0); x++)
 				for (y = 0; y < Tiles.GetLength(1); y++)
-					Tiles[x, y] = new Tile(topology, x, y,1 + x + y * Tiles.GetLength(0));
+					Tiles[x, y] = new Tile(topology, x, y,1 + x + y * Tiles.GetLength(0), GH.HeightMap[x, y], GH.water[x, y]);
 			for (x = 0; x < Tiles.GetLength(0); x++)
 				for (y = 0; y < Tiles.GetLength(1); y++)
 					for (int n = 0; n < Tiles[x, y].Neighbours.Length; n++)
 						Tiles[x, y].Neighbours[n] = GetNeighbour(x, y, n);
+
+			if (provinces == 0)
+				provinces = x;
 			Provinces = new Province[provinces];
 			for (int n = 0; n < provinces; n++)
-				Provinces[n] = new Province(this,x, n);
+				Provinces[n] = new Province(this, x * y / provinces * 2, n);
+			Provinces = Provinces.Where(p => p.Tiles[0] != null).ToArray();
+			for (int n = 0; n < Provinces.Length; n++)
+				Provinces[n].Id = n;
+
+
+			if (nations == 0)
+				nations = (int)Math.Sqrt(provinces);
+			Nations = new Nation[nations];
+			for (int n = 0; n < nations; n++)
+				Nations[n] = new Nation(this, provinces / nations * 2, n);
+			Nations = Nations.Where(p => p.Provinces.Count >0).ToArray();
+			for (int n = 0; n < Nations.Length; n++)
+				Nations[n].Id = n;
 		}
 
-		public static Map GenerateMap(Tile.topology topology, int width, int height, int provinces, Random r = null)
+		public static Map GenerateMap(Tile.topology topology, int width, int height, int provinces, int nations, Random r = null)
 		{
-			return new Map(topology, width, height, provinces, r);
+			return new Map(topology, width, height, provinces, nations, r);
 		}
 
 		private Tile GetNeighbour(int x, int y, int n)

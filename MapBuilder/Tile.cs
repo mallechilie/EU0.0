@@ -4,6 +4,8 @@ namespace MapBuilder
 {
 	public class Tile
 	{
+		public readonly float Height;
+		public readonly float WaterHeight;
 		public enum topology { triangle, square, hexagon}
 		public Tile[] Neighbours;
 		public int EmptyNeighbours
@@ -19,8 +21,9 @@ namespace MapBuilder
 		public bool HasProvince { get { return Province != null; } }
 		public readonly int x, y;
 		
-		internal Tile(topology topology, int x, int y, int id, Tile[] tiles=null)
+		internal Tile(topology topology, int x, int y, int id, float Height, float WaterHeight, Tile[] tiles=null)
 		{
+			this.WaterHeight = WaterHeight;
 			this.x = x; this.y = y;
 			Id = id;
 			TileTopology = topology;
@@ -31,6 +34,8 @@ namespace MapBuilder
 			if (tiles != null)
 				for (int n = 0; n < Neighbours.Length; n++)
 					Neighbours[n] = tiles[n];
+
+			this.Height = Height;
 		}
 
 		public override string ToString()

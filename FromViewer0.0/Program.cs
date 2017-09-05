@@ -23,12 +23,12 @@ namespace FromViewer0_0
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(v=new Viewer());
+			Application.Run(v = new Viewer());
 		}
 		internal static void generatemap()
 		{
 			v.Selected = new List<Province>();
-			map = Map.GenerateMap(Tile.topology.square, size, size, size *9/10);
+			map = Map.GenerateMap(Tile.topology.square, size, size, size * 9 / 10, 0);
 		}
 	}
 }
