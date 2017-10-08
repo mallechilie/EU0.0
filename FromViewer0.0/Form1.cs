@@ -40,13 +40,13 @@ namespace FromViewer0_0
 		public void Draw()
 		{
 			graphics = CreateGraphics();
-			graphics.Clear(SystemColors.Window);
 			Program.generatemap();
 			ProvinceColors = new Color[Program.map.Provinces.Length];
 			for (int n = 0; n < ProvinceColors.Length; n++)
 				ProvinceColors[n] = Color.FromArgb(200 * n % 127 + 90, 500 * n % 127 + 90, 300 * n % 127 + 90);
 			if (Program.map.regular)
 			{
+				graphics.Clear(SystemColors.Window);
 				DrawTiles(graphics);
 			}
 		}
@@ -222,7 +222,7 @@ namespace FromViewer0_0
 		private static Color WaterColor(Tile tile)
 		{
 			double Whiteness = (tile.Height + tile.WaterHeight) / 255;
-			return tile.WaterHeight > 1 ? MeanColor(Color.Black, Color.White, 1 - Whiteness, Whiteness) :
+			return tile.WaterHeight > 0.1 ? MeanColor(Color.Black, Color.White, 1 - Whiteness, Whiteness) :
 				TerrainColor(tile);
 		}
 		private static Color TerrainColor(Tile tile)

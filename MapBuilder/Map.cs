@@ -20,10 +20,10 @@ namespace MapBuilder
 			MapTopology = Map.topology.square;
 
 			Tiles = new Tile[x, y];
-			WaterGeneration GH = new WaterGeneration(new GenerateHeight(x, y, 3).HeightMap);
+			float[,] HeightMap = new GenerateHeight(x, y, 3).HeightMap;
 			for (x = 0; x < Tiles.GetLength(0); x++)
 				for (y = 0; y < Tiles.GetLength(1); y++)
-					Tiles[x, y] = new Tile(topology, x, y,1 + x + y * Tiles.GetLength(0), GH.HeightMap[x, y], GH.water[x, y]);
+					Tiles[x, y] = new Tile(topology, x, y,1 + x + y * Tiles.GetLength(0), HeightMap[x, y], 0);
 			for (x = 0; x < Tiles.GetLength(0); x++)
 				for (y = 0; y < Tiles.GetLength(1); y++)
 					for (int n = 0; n < Tiles[x, y].Neighbours.Length; n++)

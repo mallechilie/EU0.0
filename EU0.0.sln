@@ -27,7 +27,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superbest random", "Superbe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{E80CAC70-55FF-4E28-8BA7-8CD43CFC0441}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerrainGeneration", "TerrainGeneration\TerrainGeneration.csproj", "{CE723298-691B-41F4-83CD-CE01404EC085}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeightGeneration", "TerrainGeneration\HeightGeneration.csproj", "{CE723298-691B-41F4-83CD-CE01404EC085}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mechanics", "Mechanics", "{4F1F5FEC-D9D4-432B-AD19-C23CF6A9A471}"
 EndProject

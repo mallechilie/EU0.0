@@ -11,7 +11,7 @@ namespace FromViewer0_0
 	static class Program
 	{
 		public static Map map;
-		static int size = 100;
+		static int size = 1000;
 		static Viewer v;
 
 

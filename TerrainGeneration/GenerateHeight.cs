@@ -12,14 +12,17 @@ namespace TerrainGeneration
 		public float[,] HeightMap;
 		float delta;
 		int distance;
+		CoordinateSystem cs;
 
 		public GenerateHeight(int x, int y, int distance = 0)
 		{
+			cs = new CoordinateSystem(x, y);
 			delta = 1;
 			HeightMap = new float[x, y];
 			this.distance = (int)Math.Pow(2, (int)Math.Log(Math.Min(x, y), 2) / 2);// - distance);
-			GenerateHeights(new Random());
+			GenerateHeights();
 			CompensateMean();
+			Round();
 		}
 
 		public void CompensateMean()
@@ -51,6 +54,15 @@ namespace TerrainGeneration
 				GenerateEven(R);
 				delta /= 2;
 			}
+		}
+		public void Round(Random R = null)
+		{
+			R = R ?? new Random();
+			float[,] Rounded = (float[,])HeightMap.Clone();
+			for (int x = 0; x < HeightMap.GetLength(0); x++)
+				for (int y = 0; y < HeightMap.GetLength(1); y++)
+					Rounded[x, y] = (float)cs.GetNeightbours(new Coordinate(x, y)).Select(c => HeightMap[c.x, c.y]).Concat(new[] { HeightMap[x, y] }).Average();
+			HeightMap = Rounded;
 		}
 
 		public void GenerateEven(Random R)

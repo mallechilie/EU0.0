@@ -1,0 +1,11 @@
+﻿ 
+	- tile structure
+		- Size
+		- Height
+		- hardness
+
+	- Water structure
+		- Speed, height = mass
+
+	- States
+		- previous, static, next
