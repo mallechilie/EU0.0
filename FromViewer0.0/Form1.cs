@@ -1,32 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using MapBuilder;
 
-namespace FromViewer0_0
+namespace FromViewer
 {
 	public partial class Viewer : Form
 	{
-		Graphics graphics;
-		Color[] ProvinceColors;
-		int x = 0, y = 0;
-		int mx = 0, my = 0;
-		Map Map
+        private Graphics graphics;
+        private Color[] provinceColors;
+        private int x, y;
+        private int mx, my;
+
+        private Map Map
 		{
 			get
 			{
-				return Program.map;
+				return Program.Map;
 			}
 		}
 		public List<Province> Selected;
 		public enum MapMode { Terrain, Province, Nation}
-		MapMode mapMode = MapMode.Terrain;
+
+        private MapMode mapMode = MapMode.Terrain;
 
 		public Viewer()
 		{
@@ -40,11 +38,11 @@ namespace FromViewer0_0
 		public void Draw()
 		{
 			graphics = CreateGraphics();
-			Program.generatemap();
-			ProvinceColors = new Color[Program.map.Provinces.Length];
-			for (int n = 0; n < ProvinceColors.Length; n++)
-				ProvinceColors[n] = Color.FromArgb(200 * n % 127 + 90, 500 * n % 127 + 90, 300 * n % 127 + 90);
-			if (Program.map.regular)
+			Program.Generatemap();
+			provinceColors = new Color[Program.Map.Provinces.Length];
+			for (int n = 0; n < provinceColors.Length; n++)
+				provinceColors[n] = Color.FromArgb(200 * n % 127 + 90, 500 * n % 127 + 90, 300 * n % 127 + 90);
+			if (Program.Map.Regular)
 			{
 				graphics.Clear(SystemColors.Window);
 				DrawTiles(graphics);
@@ -53,14 +51,14 @@ namespace FromViewer0_0
 
 		public void DrawMouse(Object o, MouseEventArgs mea)
 		{
-			if (Program.map == null)
+			if (Program.Map == null)
 			{
-				Program.generatemap();
-				ProvinceColors = new Color[Program.map.Provinces.Length];
-				for (int n = 0; n < ProvinceColors.Length; n++)
-					ProvinceColors[n] = Color.FromArgb(200 * n % 127 + 90, 500 * n % 127 + 90, 300 * n % 127 + 90);
+				Program.Generatemap();
+				provinceColors = new Color[Program.Map.Provinces.Length];
+				for (int n = 0; n < provinceColors.Length; n++)
+					provinceColors[n] = Color.FromArgb(200 * n % 127 + 90, 500 * n % 127 + 90, 300 * n % 127 + 90);
 			}
-			Map map = Program.map;
+			Map map = Program.Map;
 			x = PointToClient(Cursor.Position).X * (map.Tiles.GetLength(0) + 1) / ClientSize.Width;
 			if (x >= map.Tiles.GetLength(0) || x < 0) 
 				return;
@@ -165,10 +163,10 @@ namespace FromViewer0_0
 		{
 			switch (tile.TileTopology)
 			{
-				case Tile.topology.square:
+				case Tile.Topology.Square:
 					{
-						Rectangle rect = new Rectangle((int)((float)ClientSize.Width / (Map.Tiles.GetLength(0) + 1) * tile.x),
-							(int)((float)ClientSize.Height / (Map.Tiles.GetLength(1) + 1) * tile.y),
+						Rectangle rect = new Rectangle((int)((float)ClientSize.Width / (Map.Tiles.GetLength(0) + 1) * tile.X),
+							(int)((float)ClientSize.Height / (Map.Tiles.GetLength(1) + 1) * tile.Y),
 							(int)((float)ClientSize.Width / (Map.Tiles.GetLength(0) + 1))+1,
 							(int)((float)ClientSize.Height / (Map.Tiles.GetLength(1) + 1))+1);
 						//graphics.DrawRectangle(Pens.Black, rect);
@@ -181,48 +179,48 @@ namespace FromViewer0_0
 		}
 		private Color TileColor(Tile tile)
 		{
-			Color TerrainColor = Viewer.WaterColor(tile);
+			Color terrainColor = Viewer.WaterColor(tile);
 			switch (mapMode)
 			{
 				case MapMode.Province:
 					if (tile.HasProvince)
 					{
 						int h = (int)tile.Height;
-						Color c = ProvinceColors[tile.Province.Id];
-						return MeanColor(TerrainColor, c);
+						Color c = provinceColors[tile.Province.Id];
+						return MeanColor(terrainColor, c);
 					}
 					else
-						return TerrainColor;
+						return terrainColor;
 				case MapMode.Nation:
 					if (tile.HasProvince && tile.Province.HasNation)
 					{
-						if (tile.x != 0)
+						if (tile.X != 0)
 						{
-							Tile above = Map.Tiles[tile.x - 1, tile.y];
+							Tile above = Map.Tiles[tile.X - 1, tile.Y];
 							if (above.HasProvince && above.Province.HasNation && above.Province.Nation != tile.Province.Nation)
 								return Color.Black;
 						}
-						if (tile.y != 0)
+						if (tile.Y != 0)
 						{
-							Tile left = Map.Tiles[tile.x, tile.y - 1];
+							Tile left = Map.Tiles[tile.X, tile.Y - 1];
 							if (left.HasProvince && left.Province.HasNation && left.Province.Nation != tile.Province.Nation)
 								return Color.Black;
 						}
 						int h = (int)tile.Height;
-						Color c = ProvinceColors[tile.Province.Nation.Id];
-						return MeanColor(TerrainColor, c);
+						Color c = provinceColors[tile.Province.Nation.Id];
+						return MeanColor(terrainColor, c);
 					}
 					break;
 				case MapMode.Terrain:
-					return TerrainColor;
+					return terrainColor;
 			}
 			return default(Color);
 		}
 		#region CalculateColors
 		private static Color WaterColor(Tile tile)
 		{
-			double Whiteness = (tile.Height + tile.WaterHeight) / 255;
-			return tile.WaterHeight > 0.1 ? MeanColor(Color.Black, Color.White, 1 - Whiteness, Whiteness) :
+			double whiteness = (tile.Height + tile.WaterHeight) / 255;
+			return tile.WaterHeight > 0.1 ? MeanColor(Color.Black, Color.White, 1 - whiteness, whiteness) :
 				TerrainColor(tile);
 		}
 		private static Color TerrainColor(Tile tile)
@@ -237,9 +235,9 @@ namespace FromViewer0_0
 		{
 			return FromFormula(a, b, (c, d) => (c + d) / 2);
 		}
-		private static Color MeanColor(Color a, Color b, double WeightA, double WeightB)
+		private static Color MeanColor(Color a, Color b, double weightA, double weightB)
 		{
-			return FromFormula(a, b, (c, d) => (int)((c * WeightA + d * WeightB) / (WeightA + WeightB)));
+			return FromFormula(a, b, (c, d) => (int)((c * weightA + d * weightB) / (weightA + weightB)));
 		}
 		private static Color FromFormula(Color a, Color b, Func<int, int, int> formula)
 		{

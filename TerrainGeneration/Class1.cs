@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TerrainGeneration
 {
 	public class Water
 	{
-		public readonly StaticState staticState;
-		public DynamicState previous;
-		public DynamicState next;
+		public readonly StaticState StaticState;
+		public DynamicState Previous;
+		public DynamicState Next;
 
 
 
@@ -18,40 +16,40 @@ namespace TerrainGeneration
 
 	public class StaticState
 	{
-		StaticTileState[,] tiles;
+        private StaticTileState[,] tiles;
 
 	}
 
 	public class DynamicState
 	{
-		DynamicTileState[,] tiles;
+        private DynamicTileState[,] tiles;
 
 	}
 
 
 	public class StaticTileState 
 	{
-		public readonly int x, y;
+		public readonly int X, Y;
 		public readonly float BaseHeight;
 		public readonly Vector Slope;
 		public readonly StaticTileState[] Neighbours;
 
 		public StaticTileState(StaticTileState[,] states, int x, int y)
 		{
-			this.x = x;
-			this.y = y;
+			this.X = x;
+			this.Y = y;
 			Neighbours = GetNeighbours(states).ToArray();
 			Slope = GetSlope();
 		}
 
 		private Vector GetSlope()
 		{
-			float LU = Mean(0);
-			float RU = Mean(1);
-			float LD = Mean(2);
-			float RD = Mean(3);
-			float xy = LU - RD;
-			float yx = RU - LD;
+			float lu = Mean(0);
+			float ru = Mean(1);
+			float ld = Mean(2);
+			float rd = Mean(3);
+			float xy = lu - rd;
+			float yx = ru - ld;
 			return new Vector(xy - yx, xy + yx) / 2;
 		}
 		private float Mean(int location)
@@ -78,14 +76,14 @@ namespace TerrainGeneration
 		}
 		private IEnumerable<StaticTileState> GetNeighbours(StaticTileState[,] states)
 		{
-			Coordinate[] cs = new[] { new Coordinate(x-1, y - 1), new Coordinate(x, y - 1), new Coordinate(x + 1, y - 1),
-				new Coordinate(x-1, y), new Coordinate(x, y), new Coordinate(x + 1, y),
-				new Coordinate(x-1, y + 1), new Coordinate(x, y + 1), new Coordinate(x + 1, y + 1)};
+			Coordinate[] cs = new[] { new Coordinate(X-1, Y - 1), new Coordinate(X, Y - 1), new Coordinate(X + 1, Y - 1),
+				new Coordinate(X-1, Y), new Coordinate(X, Y), new Coordinate(X + 1, Y),
+				new Coordinate(X-1, Y + 1), new Coordinate(X, Y + 1), new Coordinate(X + 1, Y + 1)};
 			foreach (Coordinate c in cs)
 			{
-				if (c.x < 0 || c.y < 0 || c.x >= states.GetLength(0) || c.y >= states.GetLength(1))
+				if (c.X < 0 || c.Y < 0 || c.X >= states.GetLength(0) || c.Y >= states.GetLength(1))
 					yield return null;
-				yield return states[c.x, c.y];
+				yield return states[c.X, c.Y];
 			}
 		}
 	}
@@ -107,8 +105,8 @@ namespace TerrainGeneration
 
 	public struct Vector
 	{
-		float x;
-		float y;
+        private float x;
+        private float y;
 
 		public Vector(float x, float y)
 		{

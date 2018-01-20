@@ -6,7 +6,7 @@ namespace MapBuilder
 	{
 		public readonly float Height;
 		public readonly float WaterHeight;
-		public enum topology { triangle, square, hexagon}
+		public enum Topology { Triangle, Square, Hexagon}
 		public Tile[] Neighbours;
 		public int EmptyNeighbours
 		{
@@ -14,28 +14,28 @@ namespace MapBuilder
 				return Neighbours.Where(t => t!=null && !t.HasProvince).Count();
 			}
 		}
-		public topology TileTopology;
+		public Topology TileTopology;
 		public int Id;
 		public Province Province;
 		// Could be made internal? (Every tile should have a province.)
 		public bool HasProvince { get { return Province != null; } }
-		public readonly int x, y;
+		public readonly int X, Y;
 		
-		internal Tile(topology topology, int x, int y, int id, float Height, float WaterHeight, Tile[] tiles=null)
+		internal Tile(Topology topology, int x, int y, int id, float height, float waterHeight, Tile[] tiles=null)
 		{
-			this.WaterHeight = WaterHeight;
-			this.x = x; this.y = y;
+			this.WaterHeight = waterHeight;
+			this.X = x; this.Y = y;
 			Id = id;
 			TileTopology = topology;
-			Neighbours = TileTopology == topology.triangle ? new Tile[3] :
-						 TileTopology == topology.square ? new Tile[4] :
-						 TileTopology == topology.hexagon ? new Tile[6] : null;
+			Neighbours = TileTopology == Topology.Triangle ? new Tile[3] :
+						 TileTopology == Topology.Square ? new Tile[4] :
+						 TileTopology == Topology.Hexagon ? new Tile[6] : null;
 			
 			if (tiles != null)
 				for (int n = 0; n < Neighbours.Length; n++)
 					Neighbours[n] = tiles[n];
 
-			this.Height = Height;
+			this.Height = height;
 		}
 
 		public override string ToString()

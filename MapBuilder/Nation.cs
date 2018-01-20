@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MapBuilder
 {
@@ -30,17 +27,17 @@ namespace MapBuilder
 		}
 		public int Id;
 
-		public Nation(Province[] provinces, int id, NationInfo NationInfo = null)
+		public Nation(Province[] provinces, int id, NationInfo nationInfo = null)
 		{
-			this.NationInfo = NationInfo;
+			this.NationInfo = nationInfo;
 			Id = id;
 			Provinces = provinces.ToList();
 			for (int n = 0; n < Provinces.Count; n++)
 				Provinces[n].Nation = this;
 		}
-		public Nation(Map map, int size, int id, NationInfo NationInfo = null)
+		public Nation(Map map, int size, int id, NationInfo nationInfo = null)
 		{
-			this.NationInfo = NationInfo;
+			this.NationInfo = nationInfo;
 			Id = id;
 			GetTiles(map, size);
 		}
@@ -68,19 +65,19 @@ namespace MapBuilder
 			provinces.Add(first);
 			provinces[0].Nation = this;
 
-			Dictionary<Province, int> TileScores = first.Neighbours.Where(t => t != null && !t.HasNation).
+			Dictionary<Province, int> tileScores = first.Neighbours.Where(t => t != null && !t.HasNation).
 				ToDictionary(t => t, t => GetScore(t));
-			for (int n = 1; n < size && TileScores.Count > 0; n++)
+			for (int n = 1; n < size && tileScores.Count > 0; n++)
 			{
-				Province add = SelectProvince(TileScores);
+				Province add = SelectProvince(tileScores);
 				provinces.Add(add);
 				add.Nation = this;
-				TileScores.Remove(add);
+				tileScores.Remove(add);
 				foreach (Province t in add.Neighbours.Where(t => t != null && !t.HasNation))
-					if (!TileScores.ContainsKey(t) && t != null)
-						TileScores.Add(t, GetScore(t));
+					if (!tileScores.ContainsKey(t) && t != null)
+						tileScores.Add(t, GetScore(t));
 					else if (t != null)
-						TileScores[t] = GetScore(t);
+						tileScores[t] = GetScore(t);
 
 			}
 			provinces = provinces.Where(t => t != null).ToList();
@@ -129,9 +126,9 @@ namespace MapBuilder
 	{
 		public Nation Nation;
 
-		protected NationInfo(Nation Nation)
+		protected NationInfo(Nation nation)
 		{
-			this.Nation = Nation;
+			this.Nation = nation;
 		}
 	}
 }

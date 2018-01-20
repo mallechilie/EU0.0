@@ -1,13 +1,14 @@
 ﻿namespace test
 {
-	abstract class TileGroup<T>
+    internal abstract class TileGroup<T>
 	{
-		protected T[] tiles;
+		protected T[] Tiles;
 		protected TileGroup<TileGroup<T>> tileGroup;
 	}
-	abstract class TileBase
+
+    internal abstract class TileBase
 	{
-		protected int ID;
-		protected TileGroup<TileBase> tileGroup;
+		protected int Id;
+		protected TileGroup<TileBase> TileGroup;
 	}
 }

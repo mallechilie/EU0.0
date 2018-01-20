@@ -7,23 +7,23 @@ namespace MapBuilder
 	public class Map
 	{
 		public static Random R;
-		public enum topology { square, cilinder, sphere, torus }
+		public enum Topology { Square, Cilinder, Sphere, Torus }
 		public readonly Tile[,] Tiles;
-		public readonly topology MapTopology;
-		public readonly bool regular = true;
+		public readonly Topology MapTopology;
+		public readonly bool Regular = true;
 		public Province[] Provinces;
 		public Nation[] Nations;
 
-		internal Map(Tile.topology topology, int x, int y, int provinces = 0, int nations = 0, Random r = null)
+		internal Map(Tile.Topology topology, int x, int y, int provinces = 0, int nations = 0, Random r = null)
 		{
 			R = r ?? new Random();
-			MapTopology = Map.topology.square;
+			MapTopology = Map.Topology.Square;
 
 			Tiles = new Tile[x, y];
-			float[,] HeightMap = new GenerateHeight(x, y, 3).HeightMap;
+			float[,] heightMap = new GenerateHeight(x, y).HeightMap;
 			for (x = 0; x < Tiles.GetLength(0); x++)
 				for (y = 0; y < Tiles.GetLength(1); y++)
-					Tiles[x, y] = new Tile(topology, x, y,1 + x + y * Tiles.GetLength(0), HeightMap[x, y], 0);
+					Tiles[x, y] = new Tile(topology, x, y,1 + x + y * Tiles.GetLength(0), heightMap[x, y], 0);
 			for (x = 0; x < Tiles.GetLength(0); x++)
 				for (y = 0; y < Tiles.GetLength(1); y++)
 					for (int n = 0; n < Tiles[x, y].Neighbours.Length; n++)
@@ -49,7 +49,7 @@ namespace MapBuilder
 				Nations[n].Id = n;
 		}
 
-		public static Map GenerateMap(Tile.topology topology, int width, int height, int provinces, int nations, Random r = null)
+		public static Map GenerateMap(Tile.Topology topology, int width, int height, int provinces, int nations, Random r = null)
 		{
 			return new Map(topology, width, height, provinces, nations, r);
 		}
@@ -58,7 +58,7 @@ namespace MapBuilder
 		{
 			switch (Tiles[x, y].TileTopology)
 			{
-				case Tile.topology.triangle:
+				case Tile.Topology.Triangle:
 					switch (n)
 					{
 						case 0:
@@ -84,7 +84,7 @@ namespace MapBuilder
 						default: break;
 					}
 					break;
-				case Tile.topology.square:
+				case Tile.Topology.Square:
 					switch (n)
 					{
 						case 0:
@@ -106,7 +106,7 @@ namespace MapBuilder
 						default: break;
 					}
 					break;
-				case Tile.topology.hexagon:
+				case Tile.Topology.Hexagon:
 					switch (n)
 					{
 						case 0:
@@ -178,7 +178,7 @@ namespace MapBuilder
 			string s = "";
 			switch (Tiles[0, 0].TileTopology)
 			{
-				case Tile.topology.square:
+				case Tile.Topology.Square:
 					{
 						for (int y = 0; y < Tiles.GetLength(1); y++)
 						{
@@ -188,7 +188,7 @@ namespace MapBuilder
 						}
 						break;
 					}
-				case Tile.topology.hexagon:
+				case Tile.Topology.Hexagon:
 					{
 						for (int y = 0; y < Tiles.GetLength(1); y++)
 						{
@@ -203,7 +203,7 @@ namespace MapBuilder
 						}
 						break;
 					}
-				case Tile.topology.triangle:
+				case Tile.Topology.Triangle:
 					{
 						for (int y = 0; y < Tiles.GetLength(1); y++)
 						{

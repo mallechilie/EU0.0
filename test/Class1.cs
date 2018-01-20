@@ -1,26 +1,29 @@
 ﻿namespace test
 {
-	class Map
+    internal class Map
     {
-		int ID;
-		Nation[] nations;
+        private int id;
+        private Nation[] nations;
     }
-	class Nation
+
+    internal class Nation
 	{
-		int ID;
-		Map map;
-		Province[] provinces;
+        private int id;
+        private Map map;
+        private Province[] provinces;
 	}
-	class Province
+
+    internal class Province
 	{
-		int ID;
-		Nation nation;
-		Tile[] tiles;
+        private int id;
+        private Nation nation;
+        private Tile[] tiles;
 	}
-	class Tile
+
+    internal class Tile
 	{
-		int ID;
-		Province province;
+        private int id;
+        private Province province;
 	}
 
 }

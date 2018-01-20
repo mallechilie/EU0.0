@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace MapBuilder
@@ -31,17 +30,17 @@ namespace MapBuilder
 		public Nation Nation;
 		public bool HasNation { get { return Nation != null; } }
 
-		public Province(Tile[] tiles, int id, ProvinceInfo ProvinceInfo = null)
+		public Province(Tile[] tiles, int id, ProvinceInfo provinceInfo = null)
 		{
-			this.ProvinceInfo = ProvinceInfo;
+			this.ProvinceInfo = provinceInfo;
 			Id = id;
 			Tiles = tiles;
 			for (int n = 0; n < Tiles.Length; n++)
 				Tiles[n].Province = this;
 		}
-		public Province(Map map, int size, int id, ProvinceInfo ProvinceInfo = null)
+		public Province(Map map, int size, int id, ProvinceInfo provinceInfo = null)
 		{
-			this.ProvinceInfo = ProvinceInfo;
+			this.ProvinceInfo = provinceInfo;
 			Id = id;
 			GetTiles(map, size);
 		}
@@ -70,19 +69,19 @@ namespace MapBuilder
 			Tiles[0] = first;
 			Tiles[0].Province = this;
 
-			Dictionary<Tile, int> TileScores = first.Neighbours.Where(t => t != null && !t.HasProvince && t.Height > 5).
+			Dictionary<Tile, int> tileScores = first.Neighbours.Where(t => t != null && !t.HasProvince && t.Height > 5).
 				ToDictionary(t => t, t => GetScore(t));
-			for (int n = 1; n < Tiles.Length && TileScores.Count > 0; n++)
+			for (int n = 1; n < Tiles.Length && tileScores.Count > 0; n++)
 			{
-				Tile add = SelectTile(TileScores);
+				Tile add = SelectTile(tileScores);
 				Tiles[n] = add;
 				add.Province = this;
-				TileScores.Remove(add);
+				tileScores.Remove(add);
 				foreach (Tile t in add.Neighbours.Where(t => t != null && !t.HasProvince && t.Height > 5))
-					if (!TileScores.ContainsKey(t) && t != null)
-						TileScores.Add(t, GetScore(t));
+					if (!tileScores.ContainsKey(t) && t != null)
+						tileScores.Add(t, GetScore(t));
 					else if (t != null)
-						TileScores[t] = GetScore(t);
+						tileScores[t] = GetScore(t);
 
 			}
 			if (Tiles.Contains(null))
@@ -120,9 +119,9 @@ namespace MapBuilder
 	{
 		public Province Province;
 
-		protected ProvinceInfo(Province Province)
+		protected ProvinceInfo(Province province)
 		{
-			this.Province = Province;
+			this.Province = province;
 		}
 	}
 }

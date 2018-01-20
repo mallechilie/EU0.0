@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FromViewer0_0.Properties {
+namespace FromViewer.Properties {
     using System;
     
     

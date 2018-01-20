@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.14
+VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EU", "EU0.0\EU.csproj", "{94A29F0A-0FB1-448D-A5DF-FEE6D9E3C941}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -32,6 +32,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mechanics", "Mechanics", "{4F1F5FEC-D9D4-432B-AD19-C23CF6A9A471}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiceWars", "DiceWars\DiceWars.csproj", "{A5FAED13-28AB-4A79-A6AC-052EE0A57ACB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C6FB3123-A1DA-46F6-AC37-0327E8D5BA30}"
+	ProjectSection(SolutionItems) = preProject
+		TODO.txt = TODO.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -88,5 +93,8 @@ Global
 		{E80CAC70-55FF-4E28-8BA7-8CD43CFC0441} = {AB216040-D3AB-4C87-8980-75DD27EF03DC}
 		{CE723298-691B-41F4-83CD-CE01404EC085} = {AB216040-D3AB-4C87-8980-75DD27EF03DC}
 		{A5FAED13-28AB-4A79-A6AC-052EE0A57ACB} = {4F1F5FEC-D9D4-432B-AD19-C23CF6A9A471}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FEBD6A65-708D-4225-BE89-7347A58BA454}
 	EndGlobalSection
 EndGlobal

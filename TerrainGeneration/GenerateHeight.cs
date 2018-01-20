@@ -1,32 +1,52 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Superbest_random;
+#pragma warning disable 1584,1711,1572,1581,1580
 
 namespace TerrainGeneration
 {
     public class GenerateHeight
     {
 		public float[,] HeightMap;
-		float delta;
-		int distance;
-		CoordinateSystem cs;
 
-		public GenerateHeight(int x, int y, int distance = 0)
+        /// <summary>
+        /// Deviation from the mean value between other cells.
+        /// </summary>
+        private float deviation;
+        
+        /// <summary>
+        /// The difference in <paramref name="deviation"/> between iterations. A high delta will mean the deviation stays big, so a steep landscape, where a small delta will result in a flatter landscape.
+        /// <remarks>delta should be between 0 and 1.</remarks>
+        /// </summary>
+        private readonly float delta;
+
+        /// <summary>
+        /// Iteration value, smaller initiatin will give a landscape where there are multiple highs and lows.
+        /// <remarks>This value shoud stay between 1 and the smallest dimension of <paramref name="HeightMap"/>.</remarks>
+        /// </summary>
+        private int distance;
+        public readonly SquareCoordinateSystem Cs;
+
+        /// <summary>
+        /// Generates a <paramref name="HeightMap"/>.
+        /// </summary>
+        /// <param name="delta">A value between 0 and 1 that indicates the steepness: 0 is flat and 1 steep.</param>
+		public GenerateHeight(int width, int height, float delta = 0.5f)
 		{
-			cs = new CoordinateSystem(x, y);
-			delta = 1;
-			HeightMap = new float[x, y];
-			this.distance = (int)Math.Pow(2, (int)Math.Log(Math.Min(x, y), 2) / 2);// - distance);
+		    this.delta = delta;
+		    Cs = new SquareCoordinateSystem(width, height);
+			deviation = delta;
+			HeightMap = new float[width, height];
+			distance = (int)Math.Pow(2, (int)Math.Log(Math.Min(width, height), 2) / 2);
 			GenerateHeights();
 			CompensateMean();
 			Round();
 		}
 
-		public void CompensateMean()
+
+        private void CompensateMean(int minimum = 0, int maximum = 255)
 		{
+            // Calculate the min and max value
 			float min= HeightMap[0, 0], max = HeightMap[0, 0];
 			for (int x = 0; x < HeightMap.GetLength(0); x++)
 				for (int y = 0; y < HeightMap.GetLength(1); y++)
@@ -34,89 +54,63 @@ namespace TerrainGeneration
 					min = Math.Min(min, HeightMap[x, y]);
 					max = Math.Max(max, HeightMap[x, y]);
 				}
+
+            // Convert to minimum-maximum range.
 			for (int x = 0; x < HeightMap.GetLength(0); x++)
 				for (int y = 0; y < HeightMap.GetLength(1); y++)
 				{
 					HeightMap[x, y] -= min;
-					HeightMap[x, y] *= 255 / (max - min);
+					HeightMap[x, y] *= (maximum - minimum) / (max - min);
+				    HeightMap[x, y] += minimum;
 				}
 
 		}
-		public void GenerateHeights(Random R = null)
+        private void GenerateHeights(Random r = null)
 		{
-			R = R ?? new Random();
+			r = r ?? new Random();
+            // Set all starting points.
 			for (int x = 0; x < HeightMap.GetLength(0); x += distance)
 				for (int y = 0; y < HeightMap.GetLength(1); y += distance)
-					HeightMap[x, y] = (float)R.NextGaussian(0, delta);
+					HeightMap[x, y] = (float)r.NextGaussian(0, deviation);
+
+            // Set the other points.
 			for (; distance > 0; distance /= 2)
 			{
-				GenerateOdd(R);
-				GenerateEven(R);
-				delta /= 2;
+				Generate(r, false);
+				Generate(r, true);
+				deviation *= delta;
 			}
 		}
-		public void Round(Random R = null)
+        /// <summary>
+        /// Rounds the cell height to the mean of it and its neighbours.
+        /// </summary>
+        /// <param name="r"> Random number generator. </param>
+        private void Round(Random r = null)
 		{
-			R = R ?? new Random();
-			float[,] Rounded = (float[,])HeightMap.Clone();
+			r = r ?? new Random();
+			float[,] rounded = (float[,])HeightMap.Clone();
 			for (int x = 0; x < HeightMap.GetLength(0); x++)
 				for (int y = 0; y < HeightMap.GetLength(1); y++)
-					Rounded[x, y] = (float)cs.GetNeightbours(new Coordinate(x, y)).Select(c => HeightMap[c.x, c.y]).Concat(new[] { HeightMap[x, y] }).Average();
-			HeightMap = Rounded;
+					rounded[x, y] = Cs.GetNeightbours(x, y).Select(c => HeightMap[c.X, c.Y]).Concat(new[] { HeightMap[x, y] }).Average();
+			HeightMap = rounded;
 		}
 
-		public void GenerateEven(Random R)
+        private void Generate(Random r, bool even)
 		{
 			for (int x = 0; x < HeightMap.GetLength(0); x += distance)
-				for (int y = 0; y < HeightMap.GetLength(0); y += distance)
+			for (int y = x % 2 == 0 && !even ? distance : 0; y < HeightMap.GetLength(0); y += distance)
 				{
-					float mean = getMean(x, y, true);
+					float mean = GetMean(x, y, even);
 					if (Math.Abs(mean - 0) > float.Epsilon * 10)
-						HeightMap[x, y] = (float)R.NextGaussian(mean, delta);
+						HeightMap[x, y] = (float)r.NextGaussian(mean, deviation);
 				}
 		}
-		public void GenerateOdd(Random R)
-		{
-			for (int x = 0; x < HeightMap.GetLength(0); x += distance)
-				for (int y = x % 2 == 0 ? distance : 0; y < HeightMap.GetLength(0); y += distance)
-				{
-					float mean = getMean(x, y, false);
-					if (Math.Abs(mean - 0) > float.Epsilon * 10)
-						HeightMap[x, y] = (float)R.NextGaussian(mean, delta);
-				}
-		}
-
-		public float getMean(int x, int y, bool even)
-		{
-			float[] neighbours = new float[4];
-			if (even)
-			{
-				if (x - distance >= 0)
-					neighbours[0] = HeightMap[x - distance, y];
-				if (x + distance < HeightMap.GetLength(0))
-					neighbours[1] = HeightMap[x + distance, y];
-				if (y - distance >= 0)
-					neighbours[2] = HeightMap[x, y - distance];
-				if (y + distance < HeightMap.GetLength(1))
-					neighbours[3] = HeightMap[x, y + distance];
-			}
-			else
-			{
-				if (x - distance >= 0 && y - distance >= 0)
-					neighbours[0] = HeightMap[x - distance, y - distance];
-				if (x + distance < HeightMap.GetLength(0) && y - distance >= 0)
-					neighbours[1] = HeightMap[x + distance, y - distance];
-				if (x - distance >= 0 && y + distance < HeightMap.GetLength(1))
-					neighbours[2] = HeightMap[x - distance, y + distance];
-				if (x + distance < HeightMap.GetLength(0) && y + distance < HeightMap.GetLength(1))
-					neighbours[3] = HeightMap[x + distance, y + distance];
-			}
-
-			var v = neighbours.Where(f => Math.Abs(f) > 10 * float.Epsilon);
-			if (v.Count() != 0)
-				return v.Sum() / v.Count();
-			else
-				return 0;
+        private float GetMean(int x, int y, bool even)
+        {
+            // Get Neighbours (not equal to zero)
+            float[] v = Cs.GetDistancedNeighbours(x, y, even, distance).Select(c => HeightMap[c.X, c.Y]).Where(f => Math.Abs(f) > 10 * float.Epsilon).ToArray();
+            // Middle them out.
+            return v.Length != 0 ? v.Sum() / v.Length : 0;
 		}
 	}
 }

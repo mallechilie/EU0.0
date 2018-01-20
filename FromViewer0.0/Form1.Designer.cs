@@ -1,4 +1,4 @@
-﻿namespace FromViewer0_0
+﻿namespace FromViewer
 {
 	partial class Viewer
 	{

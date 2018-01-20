@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MapBuilder;
 using Superbest_random;
-using System.Windows.Forms.DataVisualization;
 
 namespace DiceWars
 {
@@ -16,7 +12,7 @@ namespace DiceWars
 
 	}
 
-	public static class AIMath
+	public static class AiMath
 	{
 		/// <summary>
 		/// Calculates the chance to throw higher than the player2. 
@@ -60,16 +56,16 @@ namespace DiceWars
 
 	}
 
-	public class DWProvinceInfo : ProvinceInfo
+	public class DwProvinceInfo : ProvinceInfo
 	{
 		public int Dice;
 
-		public DWProvinceInfo(Province Province) : base(Province)
+		public DwProvinceInfo(Province province) : base(province)
 		{
 			Dice = 1;
 		}
 
-		public void Invade(DWProvinceInfo neighbour, int dice)
+		public void Invade(DwProvinceInfo neighbour, int dice)
 		{
 			if (dice >= Dice)
 				throw new ArgumentOutOfRangeException("Always Leave 1 die behind.");
@@ -89,12 +85,12 @@ namespace DiceWars
 		}
 	}
 
-	public class DWNationInfo : NationInfo
+	public class DwNationInfo : NationInfo
 	{
 		public int DiceReserve = 0;
 		public int DicePerTurn { get => Nation.Provinces.Count; }
 
-		public DWNationInfo(Nation Nation) : base(Nation)
+		public DwNationInfo(Nation nation) : base(nation)
 		{
 		}
 
@@ -102,12 +98,12 @@ namespace DiceWars
 		{
 			DiceReserve += DicePerTurn;
 			// TODO: fix the typecast, there has to be a better way.
-			for (var unfilledProvinces = Nation.Provinces.Where(p => ((DWProvinceInfo)p.ProvinceInfo).Dice < DiceWars.ForceLimit);
+			for (var unfilledProvinces = Nation.Provinces.Where(p => ((DwProvinceInfo)p.ProvinceInfo).Dice < DiceWars.ForceLimit);
 				unfilledProvinces.Count() > 0 && DiceReserve > 0;
-				unfilledProvinces = Nation.Provinces.Where(p => ((DWProvinceInfo)p.ProvinceInfo).Dice < DiceWars.ForceLimit)) 
+				unfilledProvinces = Nation.Provinces.Where(p => ((DwProvinceInfo)p.ProvinceInfo).Dice < DiceWars.ForceLimit)) 
 			{
 				Province p = unfilledProvinces.ElementAt(DiceWars.R.Next(unfilledProvinces.Count()));
-				((DWProvinceInfo)p.ProvinceInfo).Dice++;
+				((DwProvinceInfo)p.ProvinceInfo).Dice++;
 				DiceReserve--;
 			}
 		}

@@ -10,24 +10,24 @@ namespace Superbest_random
     public static class RandomExtensions
     {
 		/// <summary>
-		/// Throws <param name="Dice"> number of dice and returns the sum.
+		/// Throws <param name="dice"> number of dice and returns the sum.
 		/// </summary>
 		/// <param name="r"></param>
-		/// <param name="Dice">Number of dice to throw.</param>
+		/// <param name="dice">Number of dice to throw.</param>
 		/// <returns></returns>
-		public static int NextDice(this Random r, int Dice)
+		public static int NextDice(this Random r, int dice)
 		{
-			if (Dice < 10)
+			if (dice < 10)
 			{
 				int sum = 0;
-				for (int x = 0; x < Dice; x++)
+				for (int x = 0; x < dice; x++)
 					sum += r.Next(1, 7);
 				return sum;
 			}
 			else
 			{
-				double mu = 3.5 * Dice;
-				double sigma = 70d / 24d * Dice;
+				double mu = 3.5 * dice;
+				double sigma = 70d / 24d * dice;
 				return Convert.ToInt32(r.NextGaussian(mu, sigma));
 			}
 		}
@@ -44,12 +44,12 @@ namespace Superbest_random
             var u1 = r.NextDouble();
             var u2 = r.NextDouble();
 
-            var rand_std_normal = Math.Sqrt(-2.0 * Math.Log(u1)) *
+            var randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) *
                                 Math.Sin(2.0 * Math.PI * u2);
 
-            var rand_normal = mu + sigma * rand_std_normal;
+            var randNormal = mu + sigma * randStdNormal;
 
-            return rand_normal;
+            return randNormal;
         }
 
         /// <summary>
