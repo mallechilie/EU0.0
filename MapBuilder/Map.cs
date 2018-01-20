@@ -1,23 +1,23 @@
 ﻿using System.Linq;
 using System;
 using TerrainGeneration;
+using Enumeration;
 
 namespace MapBuilder
 {
 	public class Map
 	{
 		public static Random R;
-		public enum Topology { Square, Cilinder, Sphere, Torus }
 		public readonly Tile[,] Tiles;
-		public readonly Topology MapTopology;
+		public readonly Shape MapTopology;
 		public readonly bool Regular = true;
 		public Province[] Provinces;
 		public Nation[] Nations;
 
-		internal Map(Tile.Topology topology, int x, int y, int provinces = 0, int nations = 0, Random r = null)
+		internal Map(TileShape topology, int x, int y, int provinces = 0, int nations = 0, Random r = null)
 		{
 			R = r ?? new Random();
-			MapTopology = Map.Topology.Square;
+			MapTopology = Shape.Square;
 
 			Tiles = new Tile[x, y];
 			float[,] heightMap = new GenerateHeight(x, y).HeightMap;
@@ -49,7 +49,7 @@ namespace MapBuilder
 				Nations[n].Id = n;
 		}
 
-		public static Map GenerateMap(Tile.Topology topology, int width, int height, int provinces, int nations, Random r = null)
+		public static Map GenerateMap(TileShape topology, int width, int height, int provinces, int nations, Random r = null)
 		{
 			return new Map(topology, width, height, provinces, nations, r);
 		}
@@ -58,7 +58,7 @@ namespace MapBuilder
 		{
 			switch (Tiles[x, y].TileTopology)
 			{
-				case Tile.Topology.Triangle:
+				case TileShape.Triangular:
 					switch (n)
 					{
 						case 0:
@@ -84,7 +84,7 @@ namespace MapBuilder
 						default: break;
 					}
 					break;
-				case Tile.Topology.Square:
+				case TileShape.Square:
 					switch (n)
 					{
 						case 0:
@@ -106,7 +106,7 @@ namespace MapBuilder
 						default: break;
 					}
 					break;
-				case Tile.Topology.Hexagon:
+				case TileShape.Hex:
 					switch (n)
 					{
 						case 0:
@@ -178,7 +178,7 @@ namespace MapBuilder
 			string s = "";
 			switch (Tiles[0, 0].TileTopology)
 			{
-				case Tile.Topology.Square:
+				case TileShape.Square:
 					{
 						for (int y = 0; y < Tiles.GetLength(1); y++)
 						{
@@ -188,7 +188,7 @@ namespace MapBuilder
 						}
 						break;
 					}
-				case Tile.Topology.Hexagon:
+				case TileShape.Hex:
 					{
 						for (int y = 0; y < Tiles.GetLength(1); y++)
 						{
@@ -203,7 +203,7 @@ namespace MapBuilder
 						}
 						break;
 					}
-				case Tile.Topology.Triangle:
+				case TileShape.Triangular:
 					{
 						for (int y = 0; y < Tiles.GetLength(1); y++)
 						{

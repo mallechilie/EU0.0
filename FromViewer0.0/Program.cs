@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using MapBuilder;
 
@@ -8,7 +7,7 @@ namespace FromViewer
 {
     internal static class Program
 	{
-		public static Map Map;
+	    private static Map Map;
         private static int size = 100;
         private static Viewer v;
 
@@ -21,12 +20,7 @@ namespace FromViewer
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(v = new Viewer());
-		}
-		internal static void Generatemap()
-		{
-			v.Selected = new List<Province>();
-			Map = Map.GenerateMap(Tile.Topology.Square, size, size, size * 9 / 10, 0);
+			Application.Run(v = new Viewer(new ProvinceViewer(size, size)));
 		}
 	}
 }

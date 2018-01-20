@@ -47,6 +47,10 @@
     <Compile Include="Tile.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Enumeration\Enumeration.csproj">
+      <Project>{ae8dbbd4-5363-400c-a5aa-aff95bb233e0}</Project>
+      <Name>Enumeration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Superbest-superbest-random-f067e1dc014c\Superbest random\Superbest random.csproj">
       <Project>{1c27ee69-a83c-4073-ace8-e55ad8214831}</Project>
       <Name>Superbest random</Name>

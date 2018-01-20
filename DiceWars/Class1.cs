@@ -87,7 +87,7 @@ namespace DiceWars
 
 	public class DwNationInfo : NationInfo
 	{
-		public int DiceReserve = 0;
+		public int DiceReserve;
 		public int DicePerTurn { get => Nation.Provinces.Count; }
 
 		public DwNationInfo(Nation nation) : base(nation)

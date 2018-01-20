@@ -45,12 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColorCalc.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="MapViewer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -80,9 +82,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Enumeration\Enumeration.csproj">
+      <Project>{ae8dbbd4-5363-400c-a5aa-aff95bb233e0}</Project>
+      <Name>Enumeration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MapBuilder\MapBuilder.csproj">
       <Project>{b51159f6-fb3e-4594-97b5-0eab4bcac096}</Project>
       <Name>MapBuilder</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TerrainGeneration\HeightGeneration.csproj">
+      <Project>{CE723298-691B-41F4-83CD-CE01404EC085}</Project>
+      <Name>HeightGeneration</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

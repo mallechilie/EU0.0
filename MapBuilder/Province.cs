@@ -32,7 +32,7 @@ namespace MapBuilder
 
 		public Province(Tile[] tiles, int id, ProvinceInfo provinceInfo = null)
 		{
-			this.ProvinceInfo = provinceInfo;
+			ProvinceInfo = provinceInfo;
 			Id = id;
 			Tiles = tiles;
 			for (int n = 0; n < Tiles.Length; n++)
@@ -40,7 +40,7 @@ namespace MapBuilder
 		}
 		public Province(Map map, int size, int id, ProvinceInfo provinceInfo = null)
 		{
-			this.ProvinceInfo = provinceInfo;
+			ProvinceInfo = provinceInfo;
 			Id = id;
 			GetTiles(map, size);
 		}
@@ -121,7 +121,7 @@ namespace MapBuilder
 
 		protected ProvinceInfo(Province province)
 		{
-			this.Province = province;
+			Province = province;
 		}
 	}
 }

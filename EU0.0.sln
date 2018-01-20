@@ -38,6 +38,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TODO.txt = TODO.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enumeration", "Enumeration\Enumeration.csproj", "{AE8DBBD4-5363-400C-A5AA-AFF95BB233E0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,10 @@ Global
 		{A5FAED13-28AB-4A79-A6AC-052EE0A57ACB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5FAED13-28AB-4A79-A6AC-052EE0A57ACB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5FAED13-28AB-4A79-A6AC-052EE0A57ACB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE8DBBD4-5363-400C-A5AA-AFF95BB233E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE8DBBD4-5363-400C-A5AA-AFF95BB233E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE8DBBD4-5363-400C-A5AA-AFF95BB233E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE8DBBD4-5363-400C-A5AA-AFF95BB233E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -93,6 +99,7 @@ Global
 		{E80CAC70-55FF-4E28-8BA7-8CD43CFC0441} = {AB216040-D3AB-4C87-8980-75DD27EF03DC}
 		{CE723298-691B-41F4-83CD-CE01404EC085} = {AB216040-D3AB-4C87-8980-75DD27EF03DC}
 		{A5FAED13-28AB-4A79-A6AC-052EE0A57ACB} = {4F1F5FEC-D9D4-432B-AD19-C23CF6A9A471}
+		{AE8DBBD4-5363-400C-A5AA-AFF95BB233E0} = {8106F0EF-4098-452A-B588-EF140299EE0E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FEBD6A65-708D-4225-BE89-7347A58BA454}

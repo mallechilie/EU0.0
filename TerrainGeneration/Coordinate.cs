@@ -1,19 +1,19 @@
 ﻿using System.Linq;
+using Enumeration;
 
 namespace TerrainGeneration
 {
 
     public abstract class CoordinateSystem
     {
-        public enum Topology { Triangle, Square, Hexagon }
-        public readonly Topology topology;
+        public readonly Shape Topology;
         protected readonly int Maxx, Maxy;
 
-        public CoordinateSystem(int maxx, int maxy, Topology topology)
+        public CoordinateSystem(int maxx, int maxy, Shape topology)
         {
-            this.Maxx = maxx;
-            this.Maxy = maxy;
-            this.topology = topology;
+            Maxx = maxx;
+            Maxy = maxy;
+            Topology = topology;
         }
 
         public Coordinate[] GetNeightbours(int x, int y)
@@ -21,19 +21,20 @@ namespace TerrainGeneration
             return GetNeightbours(new Coordinate(x, y));
         }
         public abstract Coordinate[] GetNeightbours(Coordinate c);
+        public abstract Coordinate[] GetDistancedNeighbours(int x, int y, bool even, int distance);
         protected Coordinate[] TrimNeighbours(Coordinate[] coordinates)
         {
             return coordinates.Where(cc => cc.X >= 0 && cc.Y >= 0 && cc.X < Maxx && cc.Y < Maxy).ToArray();
         }
         public override string ToString()
         {
-            return $"{Maxx}, {Maxy}, {topology}";
+            return $"{Maxx}, {Maxy}, {Topology}";
         }
     }
 
 	public class SquareCoordinateSystem : CoordinateSystem
 	{
-	    public SquareCoordinateSystem(int maxx, int maxy) : base(maxx, maxy, Topology.Square)
+	    public SquareCoordinateSystem(int maxx, int maxy) : base(maxx, maxy, Shape.Square)
 	    {
 	    }
 
@@ -43,7 +44,7 @@ namespace TerrainGeneration
 			                        new Coordinate(c.X - 1, c.Y - 1), new Coordinate(c.X + 1, c.Y + 1), new Coordinate(c.X + 1, c.Y - 1), new Coordinate(c.X - 1, c.Y + 1) };
 		    return TrimNeighbours(coordinates);
 		}
-	    public Coordinate[] GetDistancedNeighbours(int x, int y, bool even, int distance)
+	    public override Coordinate[] GetDistancedNeighbours(int x, int y, bool even, int distance)
 	    {
 	        Coordinate[] neighbours = new Coordinate[4];
 	        if (even)
@@ -71,8 +72,8 @@ namespace TerrainGeneration
 
 		public Coordinate(int x, int y)
 		{
-			this.X = x;
-			this.Y = y;
+			X = x;
+			Y = y;
 		}
 
 		public override string ToString()

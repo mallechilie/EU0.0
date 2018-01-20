@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CE723298-691B-41F4-83CD-CE01404EC085}</ProjectGuid>
+    <ProjectGuid>{AE8DBBD4-5363-400C-A5AA-AFF95BB233E0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TerrainGeneration</RootNamespace>
-    <AssemblyName>TerrainGeneration</AssemblyName>
+    <RootNamespace>Enumeration</RootNamespace>
+    <AssemblyName>Enumeration</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,22 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Coordinate.cs" />
-    <Compile Include="GenerateHeight.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Enumeration\Enumeration.csproj">
-      <Project>{ae8dbbd4-5363-400c-a5aa-aff95bb233e0}</Project>
-      <Name>Enumeration</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Superbest-superbest-random-f067e1dc014c\Superbest random\Superbest random.csproj">
-      <Project>{1c27ee69-a83c-4073-ace8-e55ad8214831}</Project>
-      <Name>Superbest random</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="TODO.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

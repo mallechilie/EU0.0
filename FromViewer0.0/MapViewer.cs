@@ -2,56 +2,81 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading.Tasks;
 using MapBuilder;
+using TerrainGeneration;
 using Enumeration;
 
 namespace FromViewer
 {
-    internal partial class Viewer : Form
+    abstract class MapViewer
     {
-        private Graphics graphics;
-        private Color[] provinceColors;
-        private int x, y;
-        private int mx, my;
-        private readonly MapViewer map;
+        public int Width, Height;
+        public readonly TileShape TileTopology;
 
-        private MapMode mapMode = MapMode.Terrain;
 
-        public Viewer(MapViewer map)
+        protected MapViewer(int width, int height, TileShape tileTopology)
         {
-            this.map = map;
-            InitializeComponent();
-            MouseMove += DrawMouse;
-            graphics = CreateGraphics();
+            Width = width;
+            Height = height;
+            TileTopology = tileTopology;
         }
 
 
-        private void ResetMap()
+        public abstract Color GetColor(int x, int y);
+        public abstract void ResetMap();
+    }
+
+    class TerrainViewer : MapViewer
+    {
+        private GenerateHeight heightMap;
+
+
+        public TerrainViewer(int width, int height) : base(width, height, TileShape.Square)
         {
-            map?.ResetMap();
-        }
-        public void Draw()
-        {
-            graphics = CreateGraphics();
             ResetMap();
-            graphics.Clear(SystemColors.Window);
-            DrawTiles();
         }
 
-        public void DrawMouse(Object o, MouseEventArgs mea)
+
+        public override Color GetColor(int x, int y)
         {
-            x = PointToClient(Cursor.Position).X * (map.Width + 1) / ClientSize.Width;
-            if (x >= map.Width || x < 0)
-                return;
-            y = PointToClient(Cursor.Position).Y * (map.Height + 1) / ClientSize.Height;
-            if (y >= map.Height || y < 0)
-                return;
-            //SelectNeighbours();
-            //SelectNewProvince();
-            mx = x;
-            my = y;
+            return ColorCalc.TerrainColor(heightMap.HeightMap[x, y]);
         }
+        public override void ResetMap()
+        {
+            heightMap = new GenerateHeight(Width, Height);
+        }
+    }
+
+    class ProvinceViewer : MapViewer
+    {
+        private Map map;
+        public List<Province> Selected;
+        private Color[] provinceColors;
+
+        public ProvinceViewer(int width, int height) : base(width, height, TileShape.Square)
+        {
+            ResetMap();
+        }
+
+        public override Color GetColor(int x, int y)
+        {
+            return map.Tiles[x, y].HasProvince
+                ? provinceColors[map.Tiles[x, y].Province.Id]
+                : ColorCalc.TerrainColor(map.Tiles[x, y], true);
+        }
+        public sealed override void ResetMap()
+        {
+            map = Map.GenerateMap(TileTopology, Width, Height, (Width + Height) / 2, (int)Math.Sqrt(Width + Height));
+
+            Selected = new List<Province>();
+            provinceColors = new Color[map.Provinces.Length];
+            for (int n = 0; n < provinceColors.Length; n++)
+                provinceColors[n] = Color.FromArgb(200 * n % 127 + 90, 500 * n % 127 + 90, 300 * n % 127 + 90);
+        }
+
 
         /*
         public void SelectNeighbours()
@@ -136,34 +161,5 @@ namespace FromViewer
             }
         }
         */
-
-        private void DrawTiles()
-        {
-            for (int x = 0; x < map.Width; x++)
-                for (int y = 0; y < map.Height; y++)
-                    DrawTile(x, y, map.GetColor(x, y));
-        }
-
-        private void DrawTile(int x, int y, Color color)
-        {
-            switch (map.TileTopology)
-            {
-                case TileShape.Square:
-                    {
-                        Rectangle rect = new Rectangle((int)((float)ClientSize.Width / (map.Width + 1) * x),
-                            (int)((float)ClientSize.Height / (map.Height + 1) * y),
-                            (int)((float)ClientSize.Width / (map.Width + 1)) + 1,
-                            (int)((float)ClientSize.Height / (map.Height + 1)) + 1);
-                        //graphics.DrawRectangle(Pens.Black, rect);
-                        graphics.FillRectangle(new SolidBrush(color), rect);
-                    }
-                    break;
-            }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Draw();
-        }
     }
 }

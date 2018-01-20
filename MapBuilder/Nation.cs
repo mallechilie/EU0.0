@@ -29,7 +29,7 @@ namespace MapBuilder
 
 		public Nation(Province[] provinces, int id, NationInfo nationInfo = null)
 		{
-			this.NationInfo = nationInfo;
+			NationInfo = nationInfo;
 			Id = id;
 			Provinces = provinces.ToList();
 			for (int n = 0; n < Provinces.Count; n++)
@@ -37,7 +37,7 @@ namespace MapBuilder
 		}
 		public Nation(Map map, int size, int id, NationInfo nationInfo = null)
 		{
-			this.NationInfo = nationInfo;
+			NationInfo = nationInfo;
 			Id = id;
 			GetTiles(map, size);
 		}
@@ -128,7 +128,7 @@ namespace MapBuilder
 
 		protected NationInfo(Nation nation)
 		{
-			this.Nation = nation;
+			Nation = nation;
 		}
 	}
 }
