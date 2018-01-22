@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MapBuilder;
 
 namespace FromViewer
@@ -16,18 +12,18 @@ namespace FromViewer
             return tile.WaterHeight > 0.1 ? MeanColor(Color.Black, Color.White, 1 - whiteness, whiteness) :
                 TerrainColor(tile);
         }
-        public static Color TerrainColor(float height, bool ShadesOfGray = false)
+        public static Color TerrainColor(float height, bool shadesOfGray = false)
         {
-            Color[] colors = ShadesOfGray
+            Color[] colors = shadesOfGray
                 ? new[] {Color.Black, Color.White}
                 : new[] {Color.Blue, Color.Cyan, Color.Green, Color.Yellow, Color.Red};
             double index = height / 255 * (colors.Length - 1.000001);
             //return colors[(int)index];
             return MeanColor(colors[(int)index], colors[(int)index + 1], 1 - (index - (int)index), index - (int)index);
         }
-        public static Color TerrainColor(Tile tile, bool ShadesOfGray = false)
+        public static Color TerrainColor(Tile tile, bool shadesOfGray = false)
         {
-            return TerrainColor(tile.Height, ShadesOfGray);
+            return TerrainColor(tile.Height, shadesOfGray);
         }
         public static Color MeanColor(Color a, Color b)
         {

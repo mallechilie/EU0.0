@@ -7,12 +7,12 @@ namespace TerrainGeneration
     public abstract class CoordinateSystem
     {
         public readonly Shape Topology;
-        protected readonly int Maxx, Maxy;
+        private readonly int width, height;
 
-        public CoordinateSystem(int maxx, int maxy, Shape topology)
+        protected CoordinateSystem(int width, int height, Shape topology)
         {
-            Maxx = maxx;
-            Maxy = maxy;
+            this.width = width;
+            this.height = height;
             Topology = topology;
         }
 
@@ -24,17 +24,17 @@ namespace TerrainGeneration
         public abstract Coordinate[] GetDistancedNeighbours(int x, int y, bool even, int distance);
         protected Coordinate[] TrimNeighbours(Coordinate[] coordinates)
         {
-            return coordinates.Where(cc => cc.X >= 0 && cc.Y >= 0 && cc.X < Maxx && cc.Y < Maxy).ToArray();
+            return coordinates.Where(cc => cc.X >= 0 && cc.Y >= 0 && cc.X < width && cc.Y < height).ToArray();
         }
         public override string ToString()
         {
-            return $"{Maxx}, {Maxy}, {Topology}";
+            return $"{width}, {height}, {Topology}";
         }
     }
 
 	public class SquareCoordinateSystem : CoordinateSystem
 	{
-	    public SquareCoordinateSystem(int maxx, int maxy) : base(maxx, maxy, Shape.Square)
+	    public SquareCoordinateSystem(int width, int height) : base(width, height, Shape.Square)
 	    {
 	    }
 
@@ -68,7 +68,7 @@ namespace TerrainGeneration
 
 	public struct Coordinate
 	{
-		public int X, Y;
+		public readonly int X, Y;
 
 		public Coordinate(int x, int y)
 		{

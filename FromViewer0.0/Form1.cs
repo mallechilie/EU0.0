@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
-using MapBuilder;
 using Enumeration;
 
 namespace FromViewer
@@ -11,12 +8,8 @@ namespace FromViewer
     internal partial class Viewer : Form
     {
         private Graphics graphics;
-        private Color[] provinceColors;
         private int x, y;
-        private int mx, my;
         private readonly MapViewer map;
-
-        private MapMode mapMode = MapMode.Terrain;
 
         public Viewer(MapViewer map)
         {
@@ -31,7 +24,7 @@ namespace FromViewer
         {
             map?.ResetMap();
         }
-        public void Draw()
+        private void Draw()
         {
             graphics = CreateGraphics();
             ResetMap();
@@ -39,7 +32,7 @@ namespace FromViewer
             DrawTiles();
         }
 
-        public void DrawMouse(Object o, MouseEventArgs mea)
+        private void DrawMouse(Object o, MouseEventArgs mea)
         {
             x = PointToClient(Cursor.Position).X * (map.Width + 1) / ClientSize.Width;
             if (x >= map.Width || x < 0)
@@ -47,10 +40,6 @@ namespace FromViewer
             y = PointToClient(Cursor.Position).Y * (map.Height + 1) / ClientSize.Height;
             if (y >= map.Height || y < 0)
                 return;
-            //SelectNeighbours();
-            //SelectNewProvince();
-            mx = x;
-            my = y;
         }
 
         /*

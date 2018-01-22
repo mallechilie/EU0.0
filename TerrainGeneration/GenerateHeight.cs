@@ -25,7 +25,7 @@ namespace TerrainGeneration
         /// <remarks>This value shoud stay between 1 and the smallest dimension of <paramref name="HeightMap"/>.</remarks>
         /// </summary>
         private int distance;
-        public readonly SquareCoordinateSystem Cs;
+        public readonly CoordinateSystem Cs;
 
         /// <summary>
         /// Generates a <paramref name="HeightMap"/>.

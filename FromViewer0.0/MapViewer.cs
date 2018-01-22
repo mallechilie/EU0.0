@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using MapBuilder;
 using TerrainGeneration;
 using Enumeration;
 
 namespace FromViewer
 {
-    abstract class MapViewer
+    internal abstract class MapViewer
     {
-        public int Width, Height;
+        public readonly int Width, Height;
         public readonly TileShape TileTopology;
 
 
@@ -22,6 +18,7 @@ namespace FromViewer
             Width = width;
             Height = height;
             TileTopology = tileTopology;
+            ResetMap();
         }
 
 
@@ -29,14 +26,13 @@ namespace FromViewer
         public abstract void ResetMap();
     }
 
-    class TerrainViewer : MapViewer
+    internal class TerrainViewer : MapViewer
     {
         private GenerateHeight heightMap;
 
 
         public TerrainViewer(int width, int height) : base(width, height, TileShape.Square)
         {
-            ResetMap();
         }
 
 
@@ -50,7 +46,7 @@ namespace FromViewer
         }
     }
 
-    class ProvinceViewer : MapViewer
+    internal class ProvinceViewer : MapViewer
     {
         private Map map;
         public List<Province> Selected;
@@ -58,7 +54,6 @@ namespace FromViewer
 
         public ProvinceViewer(int width, int height) : base(width, height, TileShape.Square)
         {
-            ResetMap();
         }
 
         public override Color GetColor(int x, int y)

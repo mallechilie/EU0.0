@@ -1,0 +1,13 @@
+Refactor MapBuilder
+Update MapViewer
+Update NationViewer
+
+Generate provinces twice (second time for better shapes)
+
+Build DiceWars
+
+Build WPF viewer
+
+Build Unity viewer
+
+Build Unreal / unity
