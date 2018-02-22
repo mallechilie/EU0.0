@@ -10,6 +10,14 @@ namespace NewMapBuilder
     {
         private readonly Province[] tiles;
         private readonly TileMap map;
+        public Province this[int index]
+        {
+            get => index < 0 || index >= tiles.Length ? null : tiles[index];
+            private set
+            {
+                if (index > 0 && index <= tiles.Length) tiles[index] = value;
+            }
+        }
         public Province[] Tiles
         {
             get { return tiles; }
@@ -17,6 +25,14 @@ namespace NewMapBuilder
         public ITileMap<Tile> Map
         {
             get { return map; }
+        }
+
+
+        public ProvinceMap(TileMap map, int provinces)
+        {
+            this.map = map;
+            tiles = new Province[provinces];
+            //TODO: initialize privinces
         }
     }
 }
