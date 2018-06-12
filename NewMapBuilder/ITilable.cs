@@ -1,4 +1,4 @@
-﻿namespace NewMapBuilder
+namespace NewMapBuilder
 {
     public interface ITilable<TSelf>
     {

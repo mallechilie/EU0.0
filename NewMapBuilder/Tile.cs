@@ -1,8 +1,11 @@
-﻿using TerrainGeneration;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using TerrainGeneration;
 
 namespace NewMapBuilder
 {
-    internal class Tile :ITilable<Tile>
+    public class Tile : ITilable<Tile>
     {
         public Tile(int x, int y, CoordinateSystem coordinateSystem, TileMap tileMap)
         {

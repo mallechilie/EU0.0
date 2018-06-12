@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ITilable.cs" />
+    <Compile Include="MapExtentions.cs" />
     <Compile Include="Nation.cs" />
     <Compile Include="NationMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
