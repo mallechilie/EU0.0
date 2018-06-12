@@ -14,14 +14,8 @@
         }
         private readonly ProvinceMap map;
         
-        public Nation[] Tiles
-        {
-            get { return tiles; }
-        }
-        public ITileMap<Province> Map
-        {
-            get { return map; }
-        }
+        public Nation[] Tiles => tiles;
+        public ITileMap<Province> Map => map;
 
 
         public NationMap(ProvinceMap map, int nations)

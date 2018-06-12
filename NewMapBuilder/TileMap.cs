@@ -7,15 +7,17 @@ namespace NewMapBuilder
         public readonly int Width, Height;
         public int Size => tiles.Length;
         private readonly Tile[] tiles;
-        public TileMap(CoordinateSystem coordinateSystem)
+
+        public TileMap(GenerateHeight heightMap)
         {
-            Width = coordinateSystem.width;
-            Height = coordinateSystem.height;
+            Width = heightMap.Cs.width;
+            Height = heightMap.Cs.height;
             tiles = new Tile[Width * Height];
             for (int x = 0; x < Width; x++)
                 for (int y = 0; y < Height; y++)
-                    tiles[x * Height + y] = new Tile(x, y, coordinateSystem, this);
+                    tiles[x * Height + y] = new Tile(x, y, heightMap.HeightMap[x,y], heightMap.Cs, this);
         }
+
         public Tile this[int index]
         {
             //TODO: out of range => null?

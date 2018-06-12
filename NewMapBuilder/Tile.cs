@@ -7,16 +7,23 @@ namespace NewMapBuilder
 {
     public class Tile : ITilable<Tile>
     {
-        public Tile(int x, int y, CoordinateSystem coordinateSystem, TileMap tileMap)
+        public Tile(int x, int y, float height, CoordinateSystem coordinateSystem, TileMap tileMap)
         {
+            this.x = x;
+            this.y = y;
             this.tileMap = tileMap;
-            this.id = x * coordinateSystem.height + y;
-            neighbours = coordinateSystem.GetNeightbours(x, y);
+            Height = height;
+            id = x * coordinateSystem.height + y;
+            neighbours = coordinateSystem.GetDirectNeightbours(x, y);
         }
 
+        private readonly int x, y;
         private readonly int id;
         private readonly Coordinate[] neighbours;
         private readonly TileMap tileMap;
+        public readonly double WaterHeight = 0;
+        public readonly float Height;
+        public int ProvinceID = -1;
         public int ID => id;
 
         public Tile[] Neighbours
@@ -28,6 +35,11 @@ namespace NewMapBuilder
                     tiles[i] = tileMap[neighbours[i]];
                 return tiles;
             }
+        }
+
+        public override string ToString()
+        {
+            return $"{x} {y}";
         }
     }
 }

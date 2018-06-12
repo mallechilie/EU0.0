@@ -1,6 +1,9 @@
-﻿namespace NewMapBuilder
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace NewMapBuilder
 {
-    class ProvinceMap : ITileMapWithBase<Province, Tile>
+    public class ProvinceMap : ITileMapWithBase<Province, Tile>
     {
         private readonly Province[] tiles;
         private readonly TileMap map;
@@ -13,21 +16,19 @@
                 if (index > 0 && index <= tiles.Length) tiles[index] = value;
             }
         }
-        public Province[] Tiles
-        {
-            get { return tiles; }
-        }
-        public ITileMap<Tile> Map
-        {
-            get { return map; }
-        }
+        public Province[] Tiles => tiles;
+
+        public ITileMap<Tile> Map => map;
 
 
-        public ProvinceMap(TileMap map, int provinces)
+        public ProvinceMap(TileMap map)
         {
             this.map = map;
-            tiles = new Province[provinces];
             //TODO: initialize privinces
+            Dictionary<int, List<Tile>> provinces = MapExtentions<Province, Tile>.GenerateTileGroup(this);
+            tiles = new Province[provinces.Count];
+            for (int i = 0; i < tiles.Length; i++)
+                tiles[i] = new Province(provinces[provinces.Keys.ElementAt(i)].ToArray(), i);
         }
     }
 }

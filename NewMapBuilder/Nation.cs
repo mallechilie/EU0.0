@@ -5,17 +5,9 @@
         private readonly int id;
         private readonly Nation[] neighbours;
         private readonly Province[] tiles;
-        public int ID
-        {
-            get { return id; }
-        }
-        public Nation[] Neighbours
-        {
-            get { return neighbours; }
-        }
-        public Province[] Tiles
-        {
-            get { return tiles; }
-        }
+        public int ID => id;
+
+        public Nation[] Neighbours => neighbours;
+        public Province[] Tiles => tiles;
     }
 }

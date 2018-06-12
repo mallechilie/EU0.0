@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Drawing;
-using MapBuilder;
+using NewMapBuilder;
 
 namespace FromViewer
 {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MapBuilder;
 using Superbest_random;
@@ -98,7 +99,7 @@ namespace DiceWars
 		{
 			DiceReserve += DicePerTurn;
 			// TODO: fix the typecast, there has to be a better way.
-			for (var unfilledProvinces = Nation.Provinces.Where(p => ((DwProvinceInfo)p.ProvinceInfo).Dice < DiceWars.ForceLimit);
+			for (IEnumerable<Province> unfilledProvinces = Nation.Provinces.Where(p => ((DwProvinceInfo)p.ProvinceInfo).Dice < DiceWars.ForceLimit);
 				unfilledProvinces.Count() > 0 && DiceReserve > 0;
 				unfilledProvinces = Nation.Provinces.Where(p => ((DwProvinceInfo)p.ProvinceInfo).Dice < DiceWars.ForceLimit)) 
 			{

@@ -41,13 +41,13 @@ namespace Superbest_random
         /// <returns></returns>
         public static double NextGaussian(this Random r, double mu = 0, double sigma = 1)
         {
-            var u1 = r.NextDouble();
-            var u2 = r.NextDouble();
+            double u1 = r.NextDouble();
+            double u2 = r.NextDouble();
 
-            var randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) *
+            double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) *
                                 Math.Sin(2.0 * Math.PI * u2);
 
-            var randNormal = mu + sigma * randStdNormal;
+            double randNormal = mu + sigma * randStdNormal;
 
             return randNormal;
         }
@@ -65,7 +65,7 @@ namespace Superbest_random
         /// <returns></returns>
         public static double NextTriangular(this Random r, double a, double b, double c)
         {
-            var u = r.NextDouble();
+            double u = r.NextDouble();
 
             return u < (c - a) / (b - a)
                        ? a + Math.Sqrt(u * (b - a) * (c - a))
@@ -88,11 +88,11 @@ namespace Superbest_random
         /// <param name = "list"></param>
         public static void Shuffle(this Random r, IList list)
         {
-            for (var i = 0; i < list.Count; i++)
+            for (int i = 0; i < list.Count; i++)
             {
-                var j = r.Next(0, i + 1);
+                int j = r.Next(0, i + 1);
 
-                var temp = list[j];
+                object temp = list[j];
                 list[j] = list[i];
                 list[i] = temp;
             }
@@ -109,14 +109,14 @@ namespace Superbest_random
         /// <returns></returns>
         public static int[] Permutation(this Random rand, int n, int k)
         {
-            var result = new List<int>();
-            var sorted = new SortedSet<int>();
+            List<int> result = new List<int>();
+            SortedSet<int> sorted = new SortedSet<int>();
 
-            for (var i = 0; i < k; i++)
+            for (int i = 0; i < k; i++)
             {
-                var r = rand.Next(1, n + 1 - i);
+                int r = rand.Next(1, n + 1 - i);
 
-                foreach (var q in sorted)
+                foreach (int q in sorted)
                     if (r >= q) r++;
 
                 result.Add(r);

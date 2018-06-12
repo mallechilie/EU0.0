@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using MapBuilder;
+using System.Linq;
+using NewMapBuilder;
 using TerrainGeneration;
 using Enumeration;
 
@@ -48,7 +49,7 @@ namespace FromViewer
 
     internal class ProvinceViewer : MapViewer
     {
-        private Map map;
+        private ProvinceMap map;
         public List<Province> Selected;
         private Color[] provinceColors;
 
@@ -58,16 +59,17 @@ namespace FromViewer
 
         public override Color GetColor(int x, int y)
         {
-            return map.Tiles[x, y].HasProvince
-                ? provinceColors[map.Tiles[x, y].Province.Id]
-                : ColorCalc.TerrainColor(map.Tiles[x, y], true);
+            int id = x * Height + y;
+            return map.Map[id].ProvinceID != -1
+                ? provinceColors[map.Map[id].ProvinceID]
+                : ColorCalc.TerrainColor(map.Map[id], true);
         }
         public sealed override void ResetMap()
         {
-            map = Map.GenerateMap(TileTopology, Width, Height, (Width + Height) / 2, (int)Math.Sqrt(Width + Height));
+            map = new ProvinceMap(new TileMap(new GenerateHeight(Width, Height)));
 
             Selected = new List<Province>();
-            provinceColors = new Color[map.Provinces.Length];
+            provinceColors = new Color[map.Tiles.Length];
             for (int n = 0; n < provinceColors.Length; n++)
                 provinceColors[n] = Color.FromArgb(200 * n % 127 + 90, 500 * n % 127 + 90, 300 * n % 127 + 90);
         }

@@ -1,6 +1,6 @@
 ﻿namespace NewMapBuilder
 {
-    class Province : ITilableWithBase<Province, Tile>
+    public class Province : ITilableWithBase<Province, Tile>
     {
         private readonly Tile[] tiles;
         private readonly int id;
@@ -9,6 +9,10 @@
         public Province(Tile[] tiles, int id)
         {
             this.tiles = tiles;
+            foreach (var tile in tiles)
+            {
+                tile.ProvinceID = id;
+            }
             this.id = id;
         }
 
