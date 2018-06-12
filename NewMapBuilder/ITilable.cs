@@ -3,14 +3,26 @@ namespace NewMapBuilder
     public interface ITilable<TSelf>
     {
         int ID { get; }
-        TSelf[] Neighbours { get; }
-
+        TSelf[] Neighbours
+        {
+            get;
+            set;
+        }
     }
 
     public interface ITilableWithBase<TSelf, TBase> : ITilable<TSelf> 
         where TBase : ITilable<TBase>
     {
         TBase[] Tiles { get; }
+    }
+
+    public interface ITilableWithParent<TSelf> : ITilable<TSelf>
+    {
+        int ParentID
+        {
+            get;
+            set;
+        }
     }
 
     public interface ITileMap<TTile> where TTile : ITilable<TTile>

@@ -25,10 +25,12 @@ namespace NewMapBuilder
         {
             this.map = map;
             //TODO: initialize privinces
-            Dictionary<int, List<Tile>> provinces = MapExtentions<Province, Tile>.GenerateTileGroup(this);
+            Dictionary<int, List<Tile>> provinces = this.GenerateTileGroup();
             tiles = new Province[provinces.Count];
             for (int i = 0; i < tiles.Length; i++)
                 tiles[i] = new Province(provinces[provinces.Keys.ElementAt(i)].ToArray(), i);
+            for (int i = 0; i < tiles.Length; i++)
+                tiles[i].GetNeighbours(this);
         }
     }
 }

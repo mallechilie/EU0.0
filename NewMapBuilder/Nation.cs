@@ -1,13 +1,26 @@
 ﻿namespace NewMapBuilder
 {
-    class Nation : ITilableWithBase<Nation,Province>
+    public class Nation : ITilableWithBase<Nation,Province>
     {
         private readonly int id;
-        private readonly Nation[] neighbours;
         private readonly Province[] tiles;
         public int ID => id;
 
-        public Nation[] Neighbours => neighbours;
+        public Nation(Province[] tiles, int id)
+        {
+            this.tiles = tiles;
+            foreach (Province tile in tiles)
+            {
+                tile.ParentID = id;
+            }
+            this.id = id;
+        }
+
+        public Nation[] Neighbours
+        {
+            get;
+            set;
+        }
         public Province[] Tiles => tiles;
     }
 }

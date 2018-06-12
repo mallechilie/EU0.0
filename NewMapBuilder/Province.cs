@@ -1,24 +1,36 @@
-﻿namespace NewMapBuilder
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace NewMapBuilder
 {
-    public class Province : ITilableWithBase<Province, Tile>
+    public class Province : ITilableWithBase<Province, Tile>, ITilableWithParent<Province>
     {
         private readonly Tile[] tiles;
         private readonly int id;
-        private readonly Province[] neighbours;
 
         public Province(Tile[] tiles, int id)
         {
+            ParentID = -1;
             this.tiles = tiles;
-            foreach (var tile in tiles)
+            foreach (Tile tile in tiles)
             {
-                tile.ProvinceID = id;
+                tile.ParentID = id;
             }
             this.id = id;
         }
 
         public Tile[] Tiles => tiles;
         public int ID => id;
-        public Province[] Neighbours => neighbours;
+        public Province[] Neighbours
+        {
+            get;
+            set;
+        }
 
+        public int ParentID
+        {
+            get;
+            set;
+        }
     }
 }
