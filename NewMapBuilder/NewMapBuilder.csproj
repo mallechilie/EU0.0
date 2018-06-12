@@ -49,5 +49,11 @@
     <Compile Include="Tile.cs" />
     <Compile Include="TileMap.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TerrainGeneration\HeightGeneration.csproj">
+      <Project>{ce723298-691b-41f4-83cd-ce01404ec085}</Project>
+      <Name>HeightGeneration</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

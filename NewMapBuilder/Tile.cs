@@ -1,17 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TerrainGeneration;
 
 namespace NewMapBuilder
 {
-    class Tile :ITilable<Tile>
+    internal class Tile :ITilable<Tile>
     {
-        private readonly int x, y;
+        public Tile(int x, int y, CoordinateSystem coordinateSystem, TileMap tileMap)
+        {
+            this.tileMap = tileMap;
+            this.id = x * coordinateSystem.height + y;
+            neighbours = coordinateSystem.GetNeightbours(x, y);
+        }
+
         private readonly int id;
-        private readonly Tile[] neighbours;
+        private readonly Coordinate[] neighbours;
+        private readonly TileMap tileMap;
         public int ID => id;
-        public Tile[] Neighbours => neighbours;
+
+        public Tile[] Neighbours
+        {
+            get
+            {
+                Tile[] tiles = new Tile[neighbours.Length];
+                for (int i = 0; i < neighbours.Length; i++)
+                    tiles[i] = tileMap[neighbours[i]];
+                return tiles;
+            }
+        }
     }
 }

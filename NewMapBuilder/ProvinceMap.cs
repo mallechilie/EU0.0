@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NewMapBuilder
+﻿namespace NewMapBuilder
 {
     class ProvinceMap : ITileMapWithBase<Province, Tile>
     {
         private readonly Province[] tiles;
         private readonly TileMap map;
+        public Province this[int index] => tiles[index];
         public Province[] Tiles
         {
             get { return tiles; }

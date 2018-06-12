@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NewMapBuilder
+﻿namespace NewMapBuilder
 {
     public interface ITilable<TSelf>
     {
@@ -13,16 +7,23 @@ namespace NewMapBuilder
 
     }
 
-    public interface ITilableWithBase<TSelf, TBase> : ITilable<TSelf> where TBase : ITilable<TBase>
+    public interface ITilableWithBase<TSelf, TBase> : ITilable<TSelf> 
+        where TBase : ITilable<TBase>
     {
         TBase[] Tiles { get; }
     }
 
     public interface ITileMap<TTile> where TTile : ITilable<TTile>
     {
+        TTile this[int index]
+        {
+            get;
+        }
         TTile[] Tiles { get; }
     }
-    public interface ITileMapWithBase<TTile, TBase> : ITileMap<TTile> where TTile : ITilableWithBase<TTile, TBase> where TBase : ITilable<TBase>
+    public interface ITileMapWithBase<TTile, TBase> : ITileMap<TTile> 
+        where TTile : ITilableWithBase<TTile, TBase> 
+        where TBase : ITilable<TBase>
     {
         ITileMap<TBase> Map { get; }
     }

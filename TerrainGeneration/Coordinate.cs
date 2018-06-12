@@ -7,7 +7,7 @@ namespace TerrainGeneration
     public abstract class CoordinateSystem
     {
         public readonly Shape Topology;
-        private readonly int width, height;
+        public readonly int width, height;
 
         protected CoordinateSystem(int width, int height, Shape topology)
         {

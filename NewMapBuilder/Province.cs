@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NewMapBuilder
+﻿namespace NewMapBuilder
 {
     class Province : ITilableWithBase<Province, Tile>
     {
         private readonly Tile[] tiles;
         private readonly int id;
         private readonly Province[] neighbours;
+
+        public Province(Tile[] tiles, int id)
+        {
+            this.tiles = tiles;
+            this.id = id;
+        }
+
         public Tile[] Tiles => tiles;
         public int ID => id;
         public Province[] Neighbours => neighbours;
