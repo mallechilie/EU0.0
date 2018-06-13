@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NewMapBuilder
 {
@@ -35,7 +33,7 @@ namespace NewMapBuilder
                     neighbours.AddRange(neighbours[next].Neighbours
                         .Where(t => freeBases.ContainsKey(t.ID)));
                     neighbours.RemoveAll(t => t.ID == neighbours[next].ID);
-                    if (neighbours.Intersect(tiles[counter]).Count() != 0) ;
+                    if (neighbours.Intersect(tiles[counter]).Count() != 0);
                 }
 
             }
@@ -49,9 +47,9 @@ namespace NewMapBuilder
             where TBase : ITilable<TBase>, ITilableWithParent<TBase>
         {
             Dictionary<int, TTile> neighbours = new Dictionary<int, TTile>();
-            foreach (TBase _tile in tile.Tiles)
+            foreach (TBase @base in tile.Tiles)
             {
-                foreach (TBase tileNeighbour in _tile.Neighbours)
+                foreach (TBase tileNeighbour in @base.Neighbours)
                 {
                     if (tileNeighbour.ParentID!=-1 && !neighbours.ContainsKey(tileNeighbour.ParentID))
                         neighbours.Add(tileNeighbour.ParentID, map.Tiles[tileNeighbour.ParentID]);

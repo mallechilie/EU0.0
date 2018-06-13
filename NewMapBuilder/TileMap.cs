@@ -4,35 +4,27 @@ namespace NewMapBuilder
 {
     public class TileMap : ITileMap<Tile>
     {
-        public readonly int Width, Height;
-        public int Size => tiles.Length;
-        private readonly Tile[] tiles;
+        private readonly int height;
 
         public TileMap(GenerateHeight heightMap)
         {
-            Width = heightMap.Cs.width;
-            Height = heightMap.Cs.height;
-            tiles = new Tile[Width * Height];
-            for (int x = 0; x < Width; x++)
-                for (int y = 0; y < Height; y++)
-                    tiles[x * Height + y] = new Tile(x, y, heightMap.HeightMap[x,y], heightMap.Cs, this);
+            int width = heightMap.Cs.width;
+            height = heightMap.Cs.height;
+            Tiles = new Tile[width * height];
+            for (int x = 0; x < width; x++)
+                for (int y = 0; y < height; y++)
+                    Tiles[x * height + y] = new Tile(x, y, heightMap.HeightMap[x,y], heightMap.Cs, this);
         }
 
-        public Tile this[int index]
+        public Tile this[int index] => index < 0 || index >= Tiles.Length ? null : Tiles[index];
+
+        public Tile this[Coordinate coordinate] => Tiles[coordinate.X * height + coordinate.Y];
+
+        public Tile this[int x, int y] => this[x * height + y];
+
+        public Tile[] Tiles
         {
-            //TODO: out of range => null?
-            get => index < 0 || index >= tiles.Length ? null : tiles[index];
-            private set
-            {
-                if (index >= 0 && index < tiles.Length)
-                    tiles[index] = value;
-            }
+            get;
         }
-
-        public Tile this[Coordinate coordinate] => tiles[coordinate.X * Height + coordinate.Y];
-
-        public Tile this[int x, int y] => this[x * Height + y];
-
-        public Tile[] Tiles => tiles;
     }
 }

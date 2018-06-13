@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using TerrainGeneration;
+﻿using TerrainGeneration;
 
 namespace NewMapBuilder
 {
@@ -14,17 +11,19 @@ namespace NewMapBuilder
             this.y = y;
             this.tileMap = tileMap;
             Height = height;
-            id = x * coordinateSystem.height + y;
+            ID = x * coordinateSystem.height + y;
             neighbours = coordinateSystem.GetDirectNeightbours(x, y);
         }
 
         private readonly int x, y;
-        private readonly int id;
         private readonly Coordinate[] neighbours;
         private readonly TileMap tileMap;
         public readonly double WaterHeight = 0;
         public readonly float Height;
-        public int ID => id;
+        public int ID
+        {
+            get;
+        }
 
         public Tile[] Neighbours
         {

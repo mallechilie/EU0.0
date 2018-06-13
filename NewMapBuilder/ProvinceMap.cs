@@ -5,18 +5,13 @@ namespace NewMapBuilder
 {
     public class ProvinceMap : ITileMapWithBase<Province, Tile>
     {
-        private readonly Province[] tiles;
         private readonly TileMap map;
-        public Province this[int index]
+        public Province this[int index] => index < 0 || index >= Tiles.Length ? null : Tiles[index];
+
+        public Province[] Tiles
         {
-            // TODO: out of range => null?
-            get => index < 0 || index >= tiles.Length ? null : tiles[index];
-            private set
-            {
-                if (index > 0 && index <= tiles.Length) tiles[index] = value;
-            }
+            get;
         }
-        public Province[] Tiles => tiles;
 
         public ITileMap<Tile> Map => map;
 
@@ -26,11 +21,11 @@ namespace NewMapBuilder
             this.map = map;
             //TODO: initialize privinces
             Dictionary<int, List<Tile>> provinces = this.GenerateTileGroup();
-            tiles = new Province[provinces.Count];
-            for (int i = 0; i < tiles.Length; i++)
-                tiles[i] = new Province(provinces[provinces.Keys.ElementAt(i)].ToArray(), i);
-            for (int i = 0; i < tiles.Length; i++)
-                tiles[i].GetNeighbours(this);
+            Tiles = new Province[provinces.Count];
+            for (int i = 0; i < Tiles.Length; i++)
+                Tiles[i] = new Province(provinces[provinces.Keys.ElementAt(i)].ToArray(), i);
+            for (int i = 0; i < Tiles.Length; i++)
+                Tiles[i].GetNeighbours(this);
         }
     }
 }

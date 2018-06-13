@@ -2,18 +2,19 @@
 {
     public class Nation : ITilableWithBase<Nation,Province>
     {
-        private readonly int id;
-        private readonly Province[] tiles;
-        public int ID => id;
+        public int ID
+        {
+            get;
+        }
 
         public Nation(Province[] tiles, int id)
         {
-            this.tiles = tiles;
+            Tiles = tiles;
             foreach (Province tile in tiles)
             {
                 tile.ParentID = id;
             }
-            this.id = id;
+            ID = id;
         }
 
         public Nation[] Neighbours
@@ -21,6 +22,9 @@
             get;
             set;
         }
-        public Province[] Tiles => tiles;
+        public Province[] Tiles
+        {
+            get;
+        }
     }
 }

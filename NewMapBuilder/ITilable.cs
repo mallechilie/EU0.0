@@ -21,7 +21,6 @@ namespace NewMapBuilder
         int ParentID
         {
             get;
-            set;
         }
     }
 
