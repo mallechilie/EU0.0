@@ -1,6 +1,9 @@
+using System.Collections.Generic;
+
 namespace NewMapBuilder
 {
     public interface ITilable<TSelf>
+        where TSelf : ITilable<TSelf>
     {
         int ID { get; }
         TSelf[] Neighbours
@@ -12,13 +15,16 @@ namespace NewMapBuilder
 
     public interface ITilableWithBase<TSelf, TBase> : ITilable<TSelf> 
         where TBase : ITilable<TBase>
+        where TSelf : ITilable<TSelf>
     {
-        TBase[] Tiles { get; }
+        List<TBase> Tiles { get; }
     }
 
-    public interface ITilableWithParent<TSelf> : ITilable<TSelf>
+    public interface ITilableWithParent<TSelf, TParent> : ITilable<TSelf>
+        where TSelf : ITilable<TSelf>
+        where TParent : ITilableWithBase<TParent, TSelf>
     {
-        int ParentID
+        TParent Parent
         {
             get;
         }

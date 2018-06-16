@@ -89,8 +89,8 @@ namespace FromViewer
         public override Color GetColor(int x, int y)
         {
             int id = x * Height + y;
-            return map.Map[id].ParentID != -1
-                ? provinceColors[map.Map[id].ParentID]
+            return map.Map[id].ParentID<Tile, Province>() != -1
+                ? provinceColors[map.Map[id].ParentID<Tile, Province>()]
                 : ColorCalc.TerrainColor(map.Map[id], true);
         }
         public sealed override void ResetMap()
@@ -201,10 +201,10 @@ namespace FromViewer
         public override Color GetColor(int x, int y)
         {
             int id = x * Height + y;
-            int provinceID = ((ProvinceMap)map.Map).Map[id].ParentID;
-            if (provinceID == -1)
+            int provinceID = ((ProvinceMap)map.Map).Map[id].ParentID<Tile, Province>();
+            if(provinceID == -1)
                 return ColorCalc.TerrainColor(((ProvinceMap)map.Map).Map[id], true);
-            int nationID = map.Map[provinceID].ParentID;
+            int nationID = map.Map[provinceID].ParentID<Province, Nation>();
             return nationID != -1
                 ? NationColors[nationID]
                 : ColorCalc.TerrainColor(((ProvinceMap)map.Map).Map[id], true);

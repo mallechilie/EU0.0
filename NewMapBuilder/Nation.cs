@@ -1,4 +1,6 @@
-﻿namespace NewMapBuilder
+﻿using System.Collections.Generic;
+
+namespace NewMapBuilder
 {
     public class Nation : ITilableWithBase<Nation,Province>
     {
@@ -7,12 +9,12 @@
             get;
         }
 
-        public Nation(Province[] tiles, int id)
+        public Nation(List<Province> tiles, int id)
         {
             Tiles = tiles;
             foreach (Province tile in tiles)
             {
-                tile.ParentID = id;
+                tile.Parent = this;
             }
             ID = id;
         }
@@ -22,7 +24,7 @@
             get;
             set;
         }
-        public Province[] Tiles
+        public List<Province> Tiles
         {
             get;
         }

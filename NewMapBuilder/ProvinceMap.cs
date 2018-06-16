@@ -23,7 +23,7 @@ namespace NewMapBuilder
             Dictionary<int, List<Tile>> provinces = this.GenerateTileGroup();
             Tiles = new Province[provinces.Count];
             for (int i = 0; i < Tiles.Length; i++)
-                Tiles[i] = new Province(provinces[provinces.Keys.ElementAt(i)].ToArray(), i);
+                Tiles[i] = new Province(provinces[provinces.Keys.ElementAt(i)].ToList(), i);
             for (int i = 0; i < Tiles.Length; i++)
                 Tiles[i].GetNeighbours(this);
         }

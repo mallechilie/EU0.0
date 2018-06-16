@@ -66,22 +66,22 @@ namespace DiceWars
 			Dice = 1;
 		}
 
-		public void Invade(DwProvinceInfo neighbour, int dice)
+		public void Invade(DwProvinceInfo neighbour, int attackingDice)
 		{
-			if (dice >= Dice)
+			if (attackingDice >= Dice)
 				throw new ArgumentOutOfRangeException("Always Leave 1 die behind.");
-			int ourRoll = DiceWars.R.NextDice(dice);
+			int ourRoll = DiceWars.R.NextDice(attackingDice);
 			int theirRoll = DiceWars.R.NextDice(neighbour.Dice);
 			while(ourRoll==theirRoll)
 			{
-				ourRoll = DiceWars.R.NextDice(dice);
+				ourRoll = DiceWars.R.NextDice(attackingDice);
 				theirRoll = DiceWars.R.NextDice(neighbour.Dice);
 			}
-			Dice -= dice;
+			Dice -= attackingDice;
 			if(ourRoll>theirRoll)
 			{
-				neighbour.Dice = dice;
-				Province.Nation.Add(neighbour.Province);
+				neighbour.Dice = attackingDice;
+				Province.Parent.Add(neighbour.Province);
 			}
 		}
 	}
@@ -89,7 +89,7 @@ namespace DiceWars
 	public class DwNationInfo : NationInfo
 	{
 		public int DiceReserve;
-		public int DicePerTurn { get => Nation.Provinces.Count; }
+		public int DicePerTurn { get => Nation.Tiles.Count; }
 
 		public DwNationInfo(Nation nation) : base(nation)
 		{
@@ -99,9 +99,9 @@ namespace DiceWars
 		{
 			DiceReserve += DicePerTurn;
 			// TODO: fix the typecast, there has to be a better way.
-			for (IEnumerable<Province> unfilledProvinces = Nation.Provinces.Where(p => ((DwProvinceInfo)p.ProvinceInfo).Dice < DiceWars.ForceLimit);
+			for (IEnumerable<Province> unfilledProvinces = Nation.Tiles.Where(p => ((DwProvinceInfo)p.ProvinceInfo).Dice < DiceWars.ForceLimit);
 				unfilledProvinces.Count() > 0 && DiceReserve > 0;
-				unfilledProvinces = Nation.Provinces.Where(p => ((DwProvinceInfo)p.ProvinceInfo).Dice < DiceWars.ForceLimit)) 
+				unfilledProvinces = Nation.Tiles.Where(p => ((DwProvinceInfo)p.ProvinceInfo).Dice < DiceWars.ForceLimit)) 
 			{
 				Province p = unfilledProvinces.ElementAt(DiceWars.R.Next(unfilledProvinces.Count()));
 				((DwProvinceInfo)p.ProvinceInfo).Dice++;

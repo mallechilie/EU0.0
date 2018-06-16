@@ -9,28 +9,28 @@ namespace Superbest_random
     /// </summary>
     public static class RandomExtensions
     {
-		/// <summary>
-		/// Throws <param name="dice"> number of dice and returns the sum.
-		/// </summary>
-		/// <param name="r"></param>
-		/// <param name="dice">Number of dice to throw.</param>
-		/// <returns></returns>
-		public static int NextDice(this Random r, int dice)
-		{
-			if (dice < 10)
-			{
-				int sum = 0;
-				for (int x = 0; x < dice; x++)
-					sum += r.Next(1, 7);
-				return sum;
-			}
-			else
-			{
-				double mu = 3.5 * dice;
-				double sigma = 70d / 24d * dice;
-				return Convert.ToInt32(r.NextGaussian(mu, sigma));
-			}
-		}
+        /// <summary>
+        /// Throws <param name="dice"> number of dice and returns the sum.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="dice">Number of dice to throw.</param>
+        /// <returns></returns>
+        public static int NextDice(this Random r, int dice)
+        {
+            if (dice < 10)
+            {
+                int sum = 0;
+                for (int x = 0; x < dice; x++)
+                    sum += r.Next(1, 7);
+                return sum;
+            }
+            else
+            {
+                double mu = 3.5 * dice;
+                double sigma = 70d / 24d * dice;
+                return Convert.ToInt32(r.NextGaussian(mu, sigma));
+            }
+        }
 
         /// <summary>
         ///   Generates normally distributed numbers. Each operation makes two Gaussians for the price of one, and apparently they can be cached or something for better performance, but who cares.

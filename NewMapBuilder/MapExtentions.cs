@@ -41,22 +41,32 @@ namespace NewMapBuilder
             return tiles;
         }
 
-
         public static void GetNeighbours<TTile, TBase>(this TTile tile, ITileMapWithBase<TTile, TBase> map)
             where TTile : ITilableWithBase<TTile, TBase>
-            where TBase : ITilable<TBase>, ITilableWithParent<TBase>
+            where TBase : ITilable<TBase>, ITilableWithParent<TBase, TTile>
         {
             Dictionary<int, TTile> neighbours = new Dictionary<int, TTile>();
             foreach (TBase @base in tile.Tiles)
-            {
                 foreach (TBase tileNeighbour in @base.Neighbours)
-                {
-                    if (tileNeighbour.ParentID!=-1 && !neighbours.ContainsKey(tileNeighbour.ParentID))
-                        neighbours.Add(tileNeighbour.ParentID, map.Tiles[tileNeighbour.ParentID]);
-                }
-            }
+                    if (tileNeighbour.ParentID<TBase, TTile>() != -1 &&
+                        !neighbours.ContainsKey(tileNeighbour.ParentID<TBase, TTile>()))
+                    {
+                        neighbours.Add(
+                                       tileNeighbour.ParentID<TBase, TTile>(),
+                                       map.Tiles[tileNeighbour.ParentID<TBase, TTile>()]);
+                    }
             neighbours.Remove(tile.ID);
             tile.Neighbours = neighbours.Values.ToArray();
+        }
+
+
+        public static int ParentID<TSelf, TParent>(this TSelf self)
+            where TSelf : ITilableWithParent<TSelf, TParent>
+            where TParent : ITilableWithBase<TParent, TSelf>
+        {
+            return self.Parent == null?
+                0:
+                self.Parent.ID;
         }
     }
 }

@@ -2,11 +2,10 @@
 
 namespace NewMapBuilder
 {
-    public class Tile : ITilableWithParent<Tile>
+    public class Tile : ITilableWithParent<Tile, Province>
     {
         public Tile(int x, int y, float height, CoordinateSystem coordinateSystem, TileMap tileMap)
         {
-            ParentID = -1;
             this.x = x;
             this.y = y;
             this.tileMap = tileMap;
@@ -43,8 +42,8 @@ namespace NewMapBuilder
         {
             return $"{x} {y}";
         }
-
-        public int ParentID
+        
+        public Province Parent
         {
             get;
             set;

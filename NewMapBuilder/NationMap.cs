@@ -24,7 +24,7 @@ namespace NewMapBuilder
             Dictionary<int, List<Province>> nations = this.GenerateTileGroup();
             Tiles = new Nation[nations.Count];
             for (int i = 0; i < Tiles.Length; i++)
-                Tiles[i] = new Nation(nations[nations.Keys.ElementAt(i)].ToArray(), i);
+                Tiles[i] = new Nation(nations[nations.Keys.ElementAt(i)].ToList(), i);
             for (int i = 0; i < Tiles.Length; i++)
                 Tiles[i].GetNeighbours(this);
         }
