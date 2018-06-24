@@ -10,10 +10,12 @@ namespace FromViewer
         private Graphics graphics;
         private int x, y;
         private readonly MapViewer map;
+        private readonly bool resizable;
 
-        public Viewer(MapViewer map)
+        public Viewer(MapViewer map, bool resizable = true)
         {
             this.map = map;
+            this.resizable = resizable;
             InitializeComponent();
             MouseMove += DrawMouse;
             graphics = CreateGraphics();
@@ -22,6 +24,11 @@ namespace FromViewer
 
         private void ResetMap()
         {
+            if (resizable)
+            {
+                map.Width = ClientSize.Width;
+                map.Height = ClientSize.Height;
+            }
             map?.ResetMap();
         }
         private void Draw()

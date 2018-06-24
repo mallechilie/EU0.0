@@ -6,7 +6,7 @@ namespace FromViewer
 {
     internal static class Program
     {
-        private static int size = 1000;
+        private static int size = 10;
 
 
         /// <summary>

@@ -99,7 +99,7 @@ namespace TerrainGeneration
         private void Generate(Random r, bool even)
         {
             for (int x = 0; x < HeightMap.GetLength(0); x += distance)
-                for (int y = x % 2 == 0 && !even ? distance : 0; y < HeightMap.GetLength(0); y += distance)
+                for (int y = x % 2 == 0 && !even ? distance : 0; y < HeightMap.GetLength(1); y += distance)
                 {
                     float mean = GetMean(x, y, even);
                     if (Math.Abs(mean - 0) > float.Epsilon * 10)

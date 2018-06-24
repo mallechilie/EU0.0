@@ -10,7 +10,7 @@ namespace FromViewer
 {
     internal abstract class MapViewer
     {
-        public readonly int Width, Height;
+        public int Width, Height;
         public readonly TileShape TileTopology;
 
 
