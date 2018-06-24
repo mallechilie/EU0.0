@@ -12,14 +12,15 @@ namespace FromViewer
     {
         public int Width, Height;
         public readonly TileShape TileTopology;
-        public readonly bool Torus = true;
+        public readonly bool Torus;
 
 
-        protected MapViewer(int width, int height, TileShape tileTopology)
+        protected MapViewer(int width, int height, TileShape tileTopology, bool torus)
         {
             Width = width;
             Height = height;
             TileTopology = tileTopology;
+            Torus = torus;
             ResetMap();
         }
 
@@ -40,7 +41,7 @@ namespace FromViewer
         private GenerateHeight heightMap;
 
 
-        public TerrainViewer(int width, int height) : base(width, height, TileShape.Square)
+        public TerrainViewer(int width, int height, bool torus) : base(width, height, TileShape.Square, torus)
         {
         }
 
@@ -70,7 +71,7 @@ namespace FromViewer
         }
         public override void ResetMap()
         {
-            waterMap = new GenerateWater(new GenerateHeight(Width, Height));
+            heightMap = new GenerateHeight(Width, Height, Torus);
         }
     }
 
@@ -80,7 +81,7 @@ namespace FromViewer
         public List<Province> Selected;
         private Color[] provinceColors;
 
-        public ProvinceViewer(int width, int height) : base(width, height, TileShape.Square)
+        public ProvinceViewer(int width, int height, bool torus) : base(width, height, TileShape.Square, torus)
         {
         }
 
@@ -93,7 +94,7 @@ namespace FromViewer
         }
         public sealed override void ResetMap()
         {
-            map = new ProvinceMap(new TileMap(new GenerateHeight(Width, Height)));
+            map = new ProvinceMap(new TileMap(new GenerateHeight(Width, Height, Torus)));
 
             Selected = new List<Province>();
             provinceColors = new Color[map.Tiles.Length];
@@ -192,7 +193,7 @@ namespace FromViewer
         public List<Province> Selected;
         private Color[] NationColors;
 
-        public NationViewer(int width, int height) : base(width, height, TileShape.Square)
+        public NationViewer(int width, int height, bool torus) : base(width, height, TileShape.Square, torus)
         {
         }
 
@@ -209,7 +210,7 @@ namespace FromViewer
         }
         public sealed override void ResetMap()
         {
-            map = new NationMap(new ProvinceMap(new TileMap(new GenerateHeight(Width, Height))));
+            map = new NationMap(new ProvinceMap(new TileMap(new GenerateHeight(Width, Height, Torus))));
 
             Selected = new List<Province>();
             NationColors = new Color[map.Tiles.Length];

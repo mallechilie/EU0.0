@@ -33,10 +33,10 @@ namespace TerrainGeneration
         /// <param name="width">The width of the map.</param>
         /// <param name="height">The height of the map.</param>
         /// <param name="delta">A value between 0 and 1 that indicates the steepness: 0 is flat and 1 steep.</param>
-        public GenerateHeight(int width, int height, float delta = 0.5f)
+        public GenerateHeight(int width, int height, bool torus, float delta = 0.5f)
         {
             this.delta = delta;
-            Cs = new SquareCoordinateSystem(width, height);
+            Cs = new SquareCoordinateSystem(width, height, torus);
             deviation = delta;
             HeightMap = new float[width, height];
             // ReSharper disable once PossibleLossOfFraction

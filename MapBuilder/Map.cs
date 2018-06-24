@@ -11,16 +11,18 @@ namespace MapBuilder
         public readonly Tile[,] Tiles;
         public readonly Shape MapTopology;
         public readonly bool Regular = true;
+        public readonly bool Torus;
         public Province[] Provinces;
         public Nation[] Nations;
 
-        internal Map(TileShape topology, int x, int y, int provinces = 0, int nations = 0, Random r = null)
+        internal Map(TileShape topology, int x, int y, bool torus, int provinces = 0, int nations = 0, Random r = null)
         {
+            Torus = torus;
             R = r ?? new Random();
             MapTopology = Shape.Square;
 
             Tiles = new Tile[x, y];
-            float[,] heightMap = new GenerateHeight(x, y).HeightMap;
+            float[,] heightMap = new GenerateHeight(x, y, torus).HeightMap;
             for (x = 0; x < Tiles.GetLength(0); x++)
                 for (y = 0; y < Tiles.GetLength(1); y++)
                     Tiles[x, y] = new Tile(topology, x, y, 1 + x + y * Tiles.GetLength(0), heightMap[x, y], 0);
@@ -49,9 +51,9 @@ namespace MapBuilder
                 Nations[n].Id = n;
         }
 
-        public static Map GenerateMap(TileShape topology, int width, int height, int provinces, int nations, Random r = null)
+        public static Map GenerateMap(TileShape topology, int width, int height, bool torus, int provinces, int nations, Random r = null)
         {
-            return new Map(topology, width, height, provinces, nations, r);
+            return new Map(topology, width, height, torus, provinces, nations, r);
         }
 
         private Tile GetNeighbour(int x, int y, int n)
