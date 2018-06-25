@@ -4,17 +4,19 @@ using Enumeration;
 namespace TerrainGeneration
 {
 
-    public abstract class CoordinateSystem
-    {
-        public readonly Shape Topology;
-        public readonly int Width, Height;
+	public abstract class CoordinateSystem
+	{
+		public readonly Shape Topology;
+		public readonly int width, height;
+	    public bool Torus;
 
-        protected CoordinateSystem(int width, int height, Shape topology)
-        {
-            this.Width = width;
-            this.Height = height;
-            Topology = topology;
-        }
+		protected CoordinateSystem(int width, int height, Shape topology, bool torus)
+		{
+		    Torus = torus;
+			this.width = width;
+			this.height = height;
+			Topology = topology;
+		}
 
         public Coordinate[] GetNeightbours(int x, int y)
         {
@@ -27,21 +29,23 @@ namespace TerrainGeneration
         public abstract Coordinate[] GetNeightbours(Coordinate c);
         public abstract Coordinate[] GetDirectNeightbours(Coordinate c);
         public abstract Coordinate[] GetDistancedNeighbours(int x, int y, bool even, int distance);
-        protected Coordinate[] TrimNeighbours(Coordinate[] coordinates)
-        {
-            return coordinates.Where(cc => cc.X >= 0 && cc.Y >= 0 && cc.X < Width && cc.Y < Height).ToArray();
-        }
-        public override string ToString()
-        {
-            return $"{Width}, {Height}, {Topology}";
-        }
-    }
+		protected Coordinate[] TrimNeighbours(Coordinate[] coordinates)
+		{
+		    if (Torus)
+		        coordinates = coordinates.Select(c => new Coordinate((c.X + width) % width, (c.Y + height) % height)).ToArray();
+			return coordinates.Where(cc => cc.X >= 0 && cc.Y >= 0 && cc.X < width && cc.Y < height).ToArray();
+		}
+		public override string ToString()
+		{
+			return $"{width}, {height}, {Topology}";
+		}
+	}
 
-    public class SquareCoordinateSystem : CoordinateSystem
-    {
-        public SquareCoordinateSystem(int width, int height) : base(width, height, Shape.Square)
-        {
-        }
+	public class SquareCoordinateSystem : CoordinateSystem
+	{
+		public SquareCoordinateSystem(int width, int height, bool torus) : base(width, height, Shape.Square, torus)
+		{
+		}
 
         public override Coordinate[] GetNeightbours(Coordinate c)
         {

@@ -54,10 +54,7 @@ namespace TerrainGeneration
 
         private void CopyHeight(int width, int height)
         {
-            distance *= 2;
-            int borderwidth = 5;
-            GenerateHeight gh = new GenerateHeight(width + distance * 2 * borderwidth, height + 2 * distance * borderwidth, false, delta, distance);
-            distance *= borderwidth;
+            GenerateHeight gh = new GenerateHeight(width + distance * 2, height + 2 * distance, false, delta, distance);
             for (int x = 0; x < HeightMap.GetLength(0); x++)
             {
                 for (int y = 0; y < HeightMap.GetLength(1); y++)
