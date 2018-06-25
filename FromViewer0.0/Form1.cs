@@ -15,6 +15,7 @@ namespace FromViewer
 
         public Viewer(MapViewer map, bool resizable = true)
         {
+            KeyPreview = true;
             this.map = map;
             this.resizable = resizable;
             controller = new ViewController(new RectangleF(0, 0, ClientSize.Width, ClientSize.Height));
@@ -142,9 +143,9 @@ namespace FromViewer
             Bitmap bitmap = map.GetBitmap();
             graphics.DrawImage(bitmap, controller.Rectangle);
             graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(0, 0, controller.Rectangle.X, ClientSize.Height));
-            graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(controller.Rectangle.X + controller.Rectangle.Width, 0, controller.Rectangle.X, ClientSize.Height));
+            graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(controller.Rectangle.X + controller.Rectangle.Width, 0, ClientSize.Width, ClientSize.Height));
             graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(0, 0, ClientSize.Width, controller.Rectangle.Y));
-            graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(0, controller.Rectangle.Y + controller.Rectangle.Height, ClientSize.Width, controller.Rectangle.Y));
+            graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(0, controller.Rectangle.Y + controller.Rectangle.Height, ClientSize.Width, ClientSize.Height));
 
 
             return;
@@ -168,6 +169,36 @@ namespace FromViewer
                     }
                     break;
             }
+        }
+
+
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            // TODO: less hacky, no override of ProcessCmdKey
+            bool changed = false;
+            switch (keyData)
+            {
+                case Keys.Right:
+                    controller.Move(-1, 0);
+                    changed = true;
+                    break;
+                case Keys.Left:
+                    controller.Move(1, 0);
+                    changed = true;
+                    break;
+                case Keys.Up:
+                    controller.Move(0, 1);
+                    changed = true;
+                    break;
+                case Keys.Down:
+                    controller.Move(0, -1);
+                    changed = true;
+                    break;
+            }
+            if (changed)
+                Draw();
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         private void button1_Click(object sender, EventArgs e)

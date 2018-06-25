@@ -36,7 +36,7 @@ namespace FromViewer
         }
         public void Move(int x, int y)
         {
-            Rectangle = new RectangleF(Rectangle.X + x, Rectangle.Y + y, Rectangle.Width, Rectangle.Height);
+            Rectangle = new RectangleF(Rectangle.X + 10 * x, Rectangle.Y + 10 * y, Rectangle.Width, Rectangle.Height);
         }
     }
 }
