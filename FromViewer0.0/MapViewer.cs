@@ -12,6 +12,7 @@ namespace FromViewer
     {
         public int Width, Height;
         public readonly TileShape TileTopology;
+        public readonly bool Torus = true;
 
 
         protected MapViewer(int width, int height, TileShape tileTopology)

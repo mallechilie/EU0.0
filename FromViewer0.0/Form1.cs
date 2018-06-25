@@ -12,11 +12,13 @@ namespace FromViewer
         private int x, y;
         private readonly MapViewer map;
         private readonly bool resizable;
+        public bool wrapAround;
 
         public Viewer(MapViewer map, bool resizable = true)
         {
             KeyPreview = true;
             this.map = map;
+            wrapAround = map.Torus;
             this.resizable = resizable;
             controller = new ViewController(new RectangleF(0, 0, ClientSize.Width, ClientSize.Height));
             InitializeComponent();
@@ -142,11 +144,20 @@ namespace FromViewer
         {
             Bitmap bitmap = map.GetBitmap();
             graphics.DrawImage(bitmap, controller.Rectangle);
-            graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(0, 0, controller.Rectangle.X, ClientSize.Height));
-            graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(controller.Rectangle.X + controller.Rectangle.Width, 0, ClientSize.Width, ClientSize.Height));
-            graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(0, 0, ClientSize.Width, controller.Rectangle.Y));
-            graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(0, controller.Rectangle.Y + controller.Rectangle.Height, ClientSize.Width, ClientSize.Height));
-
+            if (wrapAround)
+            {
+                RectangleF rect = controller.Rectangle;
+                for (float x = rect.X % rect.Width - rect.Width; x < ClientSize.Width; x += rect.Width)
+                    for (float y = rect.Y % rect.Height - rect.Height; y < ClientSize.Height; y += rect.Height)
+                        graphics.DrawImage(bitmap, new RectangleF(x, y, rect.Width, rect.Height));
+            }
+            else
+            {
+                graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(0, 0, controller.Rectangle.X, ClientSize.Height));
+                graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(controller.Rectangle.X + controller.Rectangle.Width, 0, ClientSize.Width, ClientSize.Height));
+                graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(0, 0, ClientSize.Width, controller.Rectangle.Y));
+                graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(0, controller.Rectangle.Y + controller.Rectangle.Height, ClientSize.Width, ClientSize.Height));
+            }
 
             return;
             for (int x = 0; x < map.Width; x++)
