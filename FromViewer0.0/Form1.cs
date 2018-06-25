@@ -7,6 +7,7 @@ namespace FromViewer
 {
     internal partial class Viewer : Form
     {
+        private ViewController controller;
         private Graphics graphics;
         private int x, y;
         private readonly MapViewer map;
@@ -16,8 +17,11 @@ namespace FromViewer
         {
             this.map = map;
             this.resizable = resizable;
+            controller = new ViewController(new RectangleF(0, 0, ClientSize.Width, ClientSize.Height));
             InitializeComponent();
             MouseMove += DrawMouse;
+            MouseWheel += controller.Zoom;
+            MouseWheel += (sender, args) => { Draw(); };
             graphics = CreateGraphics();
         }
 
@@ -28,14 +32,14 @@ namespace FromViewer
             {
                 map.Width = ClientSize.Width;
                 map.Height = ClientSize.Height;
+                graphics = CreateGraphics();
             }
             map?.ResetMap();
+            controller.Rectangle = new RectangleF(0, 0, ClientSize.Width, ClientSize.Height);
+            Draw();
         }
         private void Draw()
         {
-            graphics = CreateGraphics();
-            ResetMap();
-            graphics.Clear(SystemColors.Window);
             DrawTiles();
         }
 
@@ -135,6 +139,15 @@ namespace FromViewer
 
         private void DrawTiles()
         {
+            Bitmap bitmap = map.GetBitmap();
+            graphics.DrawImage(bitmap, controller.Rectangle);
+            graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(0, 0, controller.Rectangle.X, ClientSize.Height));
+            graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(controller.Rectangle.X + controller.Rectangle.Width, 0, controller.Rectangle.X, ClientSize.Height));
+            graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(0, 0, ClientSize.Width, controller.Rectangle.Y));
+            graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(0, controller.Rectangle.Y + controller.Rectangle.Height, ClientSize.Width, controller.Rectangle.Y));
+
+
+            return;
             for (int x = 0; x < map.Width; x++)
                 for (int y = 0; y < map.Height; y++)
                     DrawTile(x, y, map.GetColor(x, y));
@@ -159,7 +172,7 @@ namespace FromViewer
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Draw();
+            ResetMap();
         }
     }
 }

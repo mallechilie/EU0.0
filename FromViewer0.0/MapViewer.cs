@@ -22,7 +22,14 @@ namespace FromViewer
             ResetMap();
         }
 
-
+        public Bitmap GetBitmap()
+        {
+            Bitmap bitmap = new Bitmap(Width, Height);
+            for (int x = 0; x < Width; x++)
+                for (int y = 0; y < Height; y++)
+                    bitmap.SetPixel(x, y, GetColor(x, y));
+            return bitmap;
+        }
         public abstract Color GetColor(int x, int y);
         public abstract void ResetMap();
     }
@@ -173,7 +180,7 @@ namespace FromViewer
         {
             int id = x * Height + y;
             int provinceID = ((ProvinceMap)map.Map).Map[id].ParentID;
-            if(provinceID == -1)
+            if (provinceID == -1)
                 return ColorCalc.TerrainColor(((ProvinceMap)map.Map).Map[id], true);
             int nationID = map.Map[provinceID].ParentID;
             return nationID != -1
