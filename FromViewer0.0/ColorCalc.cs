@@ -21,11 +21,17 @@ namespace FromViewer
             //return colors[(int)index];
             return MeanColor(colors[(int)index], colors[(int)index + 1], 1 - (index - (int)index), index - (int)index);
         }
+        public static Color TerrainColor(float height, float WaterHeight, bool shadesOfGray = false)
+        {
+            Color baseColor = TerrainColor(height, shadesOfGray);
+            Color water = Color.FromArgb(0, 0, (int) WaterHeight * 2);
+            return MeanColor(baseColor, water);
+        }
         public static Color TerrainColor(Tile tile, bool shadesOfGray = false)
         {
             return TerrainColor(tile.Height, shadesOfGray);
         }
-        public static Color MeanColor(Color a, Color b)
+        private static Color MeanColor(Color a, Color b)
         {
             return FromFormula(a, b, (c, d) => (c + d) / 2);
         }
