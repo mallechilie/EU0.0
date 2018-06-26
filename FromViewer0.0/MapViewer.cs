@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 using NewMapBuilder;
 using TerrainGeneration;
 using Enumeration;
@@ -71,7 +72,7 @@ namespace FromViewer
         }
         public override void ResetMap()
         {
-            heightMap = new GenerateHeight(Width, Height, Torus);
+            waterMap = new GenerateWater(new GenerateHeight(Width, Height, Torus));
         }
     }
 

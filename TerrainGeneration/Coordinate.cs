@@ -7,14 +7,14 @@ namespace TerrainGeneration
 	public abstract class CoordinateSystem
 	{
 		public readonly Shape Topology;
-		public readonly int width, height;
+		public readonly int Width, Height;
 	    public bool Torus;
 
 		protected CoordinateSystem(int width, int height, Shape topology, bool torus)
 		{
 		    Torus = torus;
-			this.width = width;
-			this.height = height;
+			this.Width = width;
+			this.Height = height;
 			Topology = topology;
 		}
 
@@ -32,12 +32,12 @@ namespace TerrainGeneration
 		protected Coordinate[] TrimNeighbours(Coordinate[] coordinates)
 		{
 		    if (Torus)
-		        coordinates = coordinates.Select(c => new Coordinate((c.X + width) % width, (c.Y + height) % height)).ToArray();
-			return coordinates.Where(cc => cc.X >= 0 && cc.Y >= 0 && cc.X < width && cc.Y < height).ToArray();
+		        coordinates = coordinates.Select(c => new Coordinate((c.X + Width) % Width, (c.Y + Height) % Height)).ToArray();
+			return coordinates.Where(cc => cc.X >= 0 && cc.Y >= 0 && cc.X < Width && cc.Y < Height).ToArray();
 		}
 		public override string ToString()
 		{
-			return $"{width}, {height}, {Topology}";
+			return $"{Width}, {Height}, {Topology}";
 		}
 	}
 
