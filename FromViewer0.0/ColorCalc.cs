@@ -24,8 +24,8 @@ namespace FromViewer
         public static Color TerrainColor(float height, float WaterHeight, bool shadesOfGray = false)
         {
             Color baseColor = TerrainColor(height, shadesOfGray);
-            Color water = Color.FromArgb(0, 0, (int) WaterHeight * 2);
-            return MeanColor(baseColor, water);
+            Color water = Color.FromArgb(0, 0, (int) WaterHeight * 5);
+            return FromFormula(baseColor, water, (c, d) => c + d);
         }
         public static Color TerrainColor(Tile tile, bool shadesOfGray = false)
         {
@@ -41,7 +41,8 @@ namespace FromViewer
         }
         private static Color FromFormula(Color a, Color b, Func<int, int, int> formula)
         {
-            return Color.FromArgb(formula(a.A, b.A), formula(a.R, b.R), formula(a.G, b.G), formula(a.B, b.B));
+            int CorrectedFunc(int i, int i1) => Math.Min(255, Math.Max(0, formula(i, i1)));
+            return Color.FromArgb(CorrectedFunc(a.A, b.A), CorrectedFunc(a.R, b.R), CorrectedFunc(a.G, b.G), CorrectedFunc(a.B, b.B));
         }
     }
 }
