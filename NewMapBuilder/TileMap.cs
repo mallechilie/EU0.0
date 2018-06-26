@@ -8,8 +8,8 @@ namespace NewMapBuilder
 
         public TileMap(GenerateHeight heightMap)
         {
-            int width = heightMap.Cs.width;
-            height = heightMap.Cs.height;
+            int width = heightMap.Cs.Width;
+            height = heightMap.Cs.Height;
             Tiles = new Tile[width * height];
             for (int x = 0; x < width; x++)
                 for (int y = 0; y < height; y++)

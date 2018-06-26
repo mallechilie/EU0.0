@@ -17,7 +17,7 @@ namespace FromViewer
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Viewer(new NationViewer(size, size)));
+            Application.Run(new Viewer(new TerrainViewer(size, size)));
         }
     }
 }

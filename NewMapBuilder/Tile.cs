@@ -11,7 +11,7 @@ namespace NewMapBuilder
             this.y = y;
             this.tileMap = tileMap;
             Height = height;
-            ID = x * coordinateSystem.height + y;
+            ID = x * coordinateSystem.Height + y;
             neighbours = coordinateSystem.GetDirectNeightbours(x, y);
         }
 

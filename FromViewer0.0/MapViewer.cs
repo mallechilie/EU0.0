@@ -37,7 +37,7 @@ namespace FromViewer
 
     internal class TerrainViewer : MapViewer
     {
-        private GenerateHeight heightMap;
+        private GenerateWater waterMap;
 
 
         public TerrainViewer(int width, int height) : base(width, height, TileShape.Square)
@@ -47,11 +47,11 @@ namespace FromViewer
 
         public override Color GetColor(int x, int y)
         {
-            return ColorCalc.TerrainColor(heightMap.HeightMap[x, y]);
+            return ColorCalc.TerrainColor(waterMap.heightMap.HeightMap[x, y], waterMap.waterHeights[x, y], true);
         }
         public override void ResetMap()
         {
-            heightMap = new GenerateHeight(Width, Height);
+            waterMap = new GenerateWater(new GenerateHeight(Width, Height));
         }
     }
 

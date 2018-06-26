@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Coordinate.cs" />
     <Compile Include="GenerateHeight.cs" />
+    <Compile Include="GenerateWater.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

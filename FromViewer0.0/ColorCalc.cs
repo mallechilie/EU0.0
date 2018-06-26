@@ -21,11 +21,17 @@ namespace FromViewer
             //return colors[(int)index];
             return MeanColor(colors[(int)index], colors[(int)index + 1], 1 - (index - (int)index), index - (int)index);
         }
+        public static Color TerrainColor(float height, float WaterHeight, bool shadesOfGray = false)
+        {
+            Color baseColor = TerrainColor(height, shadesOfGray);
+            Color water = Color.FromArgb(0, 0, (int) WaterHeight * 5);
+            return FromFormula(baseColor, water, (c, d) => c + d);
+        }
         public static Color TerrainColor(Tile tile, bool shadesOfGray = false)
         {
             return TerrainColor(tile.Height, shadesOfGray);
         }
-        public static Color MeanColor(Color a, Color b)
+        private static Color MeanColor(Color a, Color b)
         {
             return FromFormula(a, b, (c, d) => (c + d) / 2);
         }
@@ -35,7 +41,8 @@ namespace FromViewer
         }
         private static Color FromFormula(Color a, Color b, Func<int, int, int> formula)
         {
-            return Color.FromArgb(formula(a.A, b.A), formula(a.R, b.R), formula(a.G, b.G), formula(a.B, b.B));
+            int CorrectedFunc(int i, int i1) => Math.Min(255, Math.Max(0, formula(i, i1)));
+            return Color.FromArgb(CorrectedFunc(a.A, b.A), CorrectedFunc(a.R, b.R), CorrectedFunc(a.G, b.G), CorrectedFunc(a.B, b.B));
         }
     }
 }
