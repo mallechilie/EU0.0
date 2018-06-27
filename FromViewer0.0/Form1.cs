@@ -41,6 +41,16 @@ namespace FromViewer
             controller.Rectangle = new RectangleF(0, 0, ClientSize.Width, ClientSize.Height);
             Draw();
         }
+        protected override void OnResize(EventArgs e)
+        {
+            graphics = CreateGraphics();
+            base.OnResize(e);
+        }
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            Draw();
+        }
         private void Draw()
         {
             DrawTiles();
