@@ -46,6 +46,7 @@ namespace TerrainGeneration
                     foreach (KeyValuePair<Coordinate, float> keyValuePair in neighbourWater)
                         newWater[keyValuePair.Key.X, keyValuePair.Key.Y] += keyValuePair.Value;
                 }
+            waterHeights = newWater;
         }
 
         private Dictionary<Coordinate, float> IterateWaterTile(int x, int y, Coordinate[] neighbours)

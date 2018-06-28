@@ -68,7 +68,23 @@ namespace FromViewer
 
         public override Color GetColor(int x, int y)
         {
-            return ColorCalc.TerrainColor(waterMap.HeightMap.HeightMap[x, y], waterMap.WaterHeights[x, y], true);
+            float waterHeigt = waterMap.waterHeights[x, y];
+            switch ((int)waterHeigt / 10)
+            {
+                case 1:
+                    return Color.Aquamarine;
+                case 2:
+                    return ColorCalc.TerrainColor(waterMap.heightMap.HeightMap[x, y], waterMap.waterHeights[x, y], true);
+                    return Color.Aqua;
+                case 3:
+                    return Color.DeepSkyBlue;
+                case 4:
+                    return ColorCalc.TerrainColor(waterMap.heightMap.HeightMap[x, y], waterMap.waterHeights[x, y], true);
+                    return Color.Blue;
+                case 5:
+                    return Color.DarkBlue;
+            }
+            return ColorCalc.TerrainColor(waterMap.heightMap.HeightMap[x, y], waterMap.waterHeights[x, y], true);
         }
         public override void ResetMap()
         {
