@@ -48,6 +48,7 @@ namespace FromViewer
             base.OnResize(e);
             RectangleF rect = controller.Rectangle;
             controller.Rectangle = new RectangleF(rect.X, rect.Y, Width * controller.ZoomFactor, Height * controller.ZoomFactor);
+            controller.Center = new PointF(ClientSize.Width / 2f, ClientSize.Height / 2f);
         }
         protected override void OnPaint(PaintEventArgs e)
         {
