@@ -17,22 +17,24 @@ namespace FromViewer
             set;
         }
 
+        public PointF Center;
         public float ZoomFactor = 1;
 
-        public ViewController(RectangleF rectangle)
+        public ViewController(RectangleF rectangle, PointF center)
         {
             Rectangle = rectangle;
+            Center = center;
         }
 
 
 
         public void Zoom(object sender, MouseEventArgs args)
         {
-            float zoomFactor = (float)Math.Exp(args.Delta/1000f);
-            PointF center = new PointF(Rectangle.X + Rectangle.Width / 2, Rectangle.Y + Rectangle.Height / 2);
-            PointF newCorner = new PointF(center.X - Rectangle.Width * zoomFactor / 2, center.Y - Rectangle.Height * zoomFactor / 2);
-            Rectangle = new RectangleF(Rectangle.X - Rectangle.Width * (zoomFactor - 1) / 2,
-                                       Rectangle.Y - Rectangle.Height * (zoomFactor - 1) / 2,
+            float zoomFactor = (float)Math.Exp(args.Delta / 1000f);
+            PointF corner = Rectangle.Location;
+            PointF distance = new PointF(corner.X - Center.X, corner.Y - Center.Y);
+            Rectangle = new RectangleF(Center.X + distance.X * zoomFactor,
+                                       Center.Y + distance.Y * zoomFactor,
                                        Rectangle.Width * zoomFactor,
                                        Rectangle.Height * zoomFactor);
             ZoomFactor *= zoomFactor;

@@ -20,7 +20,8 @@ namespace FromViewer
             this.map = map;
             wrapAround = map.Torus;
             this.resizable = resizable;
-            controller = new ViewController(new RectangleF(0, 0, ClientSize.Width, ClientSize.Height));
+            controller = new ViewController(new RectangleF(0, 0, ClientSize.Width, ClientSize.Height), 
+                new PointF(ClientSize.Width/2f, ClientSize.Height/2f));
             InitializeComponent();
             MouseMove += DrawMouse;
             MouseWheel += controller.Zoom;
