@@ -17,6 +17,8 @@ namespace FromViewer
             set;
         }
 
+        public float ZoomFactor = 1;
+
         public ViewController(RectangleF rectangle)
         {
             Rectangle = rectangle;
@@ -33,6 +35,7 @@ namespace FromViewer
                                        Rectangle.Y - Rectangle.Height * (zoomFactor - 1) / 2,
                                        Rectangle.Width * zoomFactor,
                                        Rectangle.Height * zoomFactor);
+            ZoomFactor *= zoomFactor;
         }
         public void Move(int x, int y)
         {

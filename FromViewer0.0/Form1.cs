@@ -45,6 +45,8 @@ namespace FromViewer
         {
             graphics = CreateGraphics();
             base.OnResize(e);
+            RectangleF rect = controller.Rectangle;
+            controller.Rectangle = new RectangleF(rect.X, rect.Y, Width * controller.ZoomFactor, Height * controller.ZoomFactor);
         }
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -65,108 +67,27 @@ namespace FromViewer
             if (y >= map.Height || y < 0)
                 return;
         }
-
-        /*
-        public void SelectNeighbours()
-        {
-            if (Map.Tiles[x, y].HasProvince)
-                foreach (var p in Map.Tiles[x, y].Province.Neighbours)
-                    SelectProvince(p.Tiles[0]);
-        }
-        public void SelectNewProvince(Tile tile = null)
-        {
-            if (tile == null)
-            {
-                if (Map.Tiles[x, y].HasProvince)
-                {
-                    if (!Selected.Contains(Map.Tiles[x, y].Province))
-                    {
-                        Selected = new List<Province>();
-                        Selected.Add(Map.Tiles[x, y].Province);
-                        DrawSelection();
-                    }
-                }
-            }
-            else
-            if (tile.HasProvince)
-            {
-                if (!Selected.Contains(tile.Province))
-                {
-                    Selected = new List<Province>();
-                    Selected.Add(tile.Province);
-                    DrawSelection();
-                }
-            }
-        }
-        public void SelectProvince(Tile tile = null)
-        {
-            if (tile == null)
-            {
-                if (Map.Tiles[x, y].HasProvince)
-                {
-                    if(!Selected.Contains(Map.Tiles[x, y].Province))
-                    {
-                        Selected.Add(Map.Tiles[x, y].Province);
-                        DrawSelection();
-                    }
-                }
-            }
-            else
-                if (tile.HasProvince)
-                {
-                    if (!Selected.Contains(tile.Province))
-                    {
-                        Selected.Add(tile.Province);
-                        DrawSelection();
-                    }
-                }
-        }
-        public void DrawSelection(Province[] provinces=null, bool selected = true)
-        {
-            if (provinces == null)
-                for (int p = 0; p < Selected.Count; p++)
-                    for (int t = 0; t < Selected[p].Tiles.Length; t++)
-                        DrawTile(graphics, Selected[p].Tiles[t], selected);
-            else
-                for (int p = 0; p < provinces.Length; p++)
-                    for (int t = 0; t < provinces[p].Tiles.Length; t++)
-                        DrawTile(graphics, provinces[p].Tiles[t], selected);
-        }
-        public void UnselectProvince(Tile tile = null)
-        {
-            if (tile == null)
-            {
-                if (!Map.Tiles[mx, my].HasProvince)
-                return;
-            if (Map.Tiles[mx, my].Province.Tiles.Contains(Map.Tiles[x, y]))
-                return;
-            DrawSelection(new[] { Map.Tiles[mx, my].Province }, false);
-            }
-            else
-            {
-                if (tile.HasProvince)
-                    DrawSelection(new[] { tile.Province }, false);
-            }
-        }
-        */
+        
 
         private void DrawTiles()
         {
             Bitmap bitmap = map.GetBitmap();
-            graphics.DrawImage(bitmap, controller.Rectangle);
+            RectangleF rect = controller.Rectangle;
             if (wrapAround)
             {
-                RectangleF rect = controller.Rectangle;
                 for (float x = rect.X % rect.Width - rect.Width; x < ClientSize.Width; x += rect.Width)
                     for (float y = rect.Y % rect.Height - rect.Height; y < ClientSize.Height; y += rect.Height)
                         graphics.DrawImage(bitmap, new RectangleF(x, y, rect.Width, rect.Height));
             }
             else
             {
-                graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(0, 0, controller.Rectangle.X, ClientSize.Height));
-                graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(controller.Rectangle.X + controller.Rectangle.Width, 0, ClientSize.Width, ClientSize.Height));
-                graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(0, 0, ClientSize.Width, controller.Rectangle.Y));
-                graphics.FillRectangle(new SolidBrush(BackColor), new RectangleF(0, controller.Rectangle.Y + controller.Rectangle.Height, ClientSize.Width, ClientSize.Height));
+
+                graphics.DrawImage(bitmap, rect);
+                Brush back = new SolidBrush(BackColor);
+                graphics.FillRectangle(back, new RectangleF(0, 0, rect.X, ClientSize.Height));
+                graphics.FillRectangle(back, new RectangleF(rect.X + rect.Width, 0, ClientSize.Width, ClientSize.Height));
+                graphics.FillRectangle(back, new RectangleF(0, 0, ClientSize.Width, rect.Y));
+                graphics.FillRectangle(back, new RectangleF(0, rect.Y + rect.Height, ClientSize.Width, ClientSize.Height));
             }
 
             return;
