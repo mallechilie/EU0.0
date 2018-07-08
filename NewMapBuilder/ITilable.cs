@@ -27,6 +27,7 @@ namespace NewMapBuilder
         TParent Parent
         {
             get;
+            set;
         }
     }
 

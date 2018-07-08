@@ -33,7 +33,7 @@ namespace NewMapBuilder
                     neighbours.AddRange(neighbours[next].Neighbours
                         .Where(t => freeBases.ContainsKey(t.ID)));
                     neighbours.RemoveAll(t => t.ID == neighbours[next].ID);
-                    if (neighbours.Intersect(tiles[counter]).Count() != 0);
+                    if (neighbours.Intersect(tiles[counter]).Count() != 0) ;
                 }
 
             }
@@ -59,13 +59,28 @@ namespace NewMapBuilder
             tile.Neighbours = neighbours.Values.ToArray();
         }
 
+        public static void Add<TTile, TBase>(this TTile tile, TBase tbase)
+            where TTile : ITilableWithBase<TTile, TBase>
+            where TBase : ITilableWithParent<TBase, TTile>
+        {
+            tbase.Parent?.Remove(tbase);
+            tile.Tiles.Add(tbase);
+            tbase.Parent = tile;
+        }
+
+        public static bool Remove<TTile, TBase>(this TTile tile, TBase tbase)
+            where TTile : ITilableWithBase<TTile, TBase>
+            where TBase : ITilableWithParent<TBase, TTile>
+        {
+            return tile.Tiles.Remove(tbase);
+        }
 
         public static int ParentID<TSelf, TParent>(this TSelf self)
             where TSelf : ITilableWithParent<TSelf, TParent>
             where TParent : ITilableWithBase<TParent, TSelf>
         {
-            return self.Parent == null?
-                0:
+            return self.Parent == null ?
+                0 :
                 self.Parent.ID;
         }
     }

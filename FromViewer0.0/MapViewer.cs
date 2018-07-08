@@ -93,100 +93,15 @@ namespace FromViewer
                 ? provinceColors[map.Map[id].ParentID<Tile, Province>()]
                 : ColorCalc.TerrainColor(map.Map[id], true);
         }
-        public sealed override void ResetMap()
+        public override sealed void ResetMap()
         {
             map = new ProvinceMap(new TileMap(new GenerateHeight(Width, Height, Torus)));
 
             Selected = new List<Province>();
             provinceColors = new Color[map.Tiles.Length];
             for (int n = 0; n < provinceColors.Length; n++)
-                provinceColors[n] = Color.FromArgb(200 * n % 127 + 90, 500 * n % 127 + 90, 300 * n % 127 + 90);
+                provinceColors[n] = Color.FromArgb(202 * n % 200 + 55, 503 * n % 200 + 55, 302 * n % 200 + 55);
         }
-
-
-        /*
-        public void SelectNeighbours()
-        {
-            if (Map.Tiles[x, y].HasProvince)
-                foreach (var p in Map.Tiles[x, y].Province.Neighbours)
-                    SelectProvince(p.Tiles[0]);
-        }
-        public void SelectNewProvince(Tile tile = null)
-        {
-            if (tile == null)
-            {
-                if (Map.Tiles[x, y].HasProvince)
-                {
-                    if (!Selected.Contains(Map.Tiles[x, y].Province))
-                    {
-                        Selected = new List<Province>();
-                        Selected.Add(Map.Tiles[x, y].Province);
-                        DrawSelection();
-                    }
-                }
-            }
-            else
-            if (tile.HasProvince)
-            {
-                if (!Selected.Contains(tile.Province))
-                {
-                    Selected = new List<Province>();
-                    Selected.Add(tile.Province);
-                    DrawSelection();
-                }
-            }
-        }
-        public void SelectProvince(Tile tile = null)
-        {
-            if (tile == null)
-            {
-                if (Map.Tiles[x, y].HasProvince)
-                {
-                    if(!Selected.Contains(Map.Tiles[x, y].Province))
-                    {
-                        Selected.Add(Map.Tiles[x, y].Province);
-                        DrawSelection();
-                    }
-                }
-            }
-            else
-                if (tile.HasProvince)
-                {
-                    if (!Selected.Contains(tile.Province))
-                    {
-                        Selected.Add(tile.Province);
-                        DrawSelection();
-                    }
-                }
-        }
-        public void DrawSelection(Province[] provinces=null, bool selected = true)
-        {
-            if (provinces == null)
-                for (int p = 0; p < Selected.Count; p++)
-                    for (int t = 0; t < Selected[p].Tiles.Length; t++)
-                        DrawTile(graphics, Selected[p].Tiles[t], selected);
-            else
-                for (int p = 0; p < provinces.Length; p++)
-                    for (int t = 0; t < provinces[p].Tiles.Length; t++)
-                        DrawTile(graphics, provinces[p].Tiles[t], selected);
-        }
-        public void UnselectProvince(Tile tile = null)
-        {
-            if (tile == null)
-            {
-                if (!Map.Tiles[mx, my].HasProvince)
-                return;
-            if (Map.Tiles[mx, my].Province.Tiles.Contains(Map.Tiles[x, y]))
-                return;
-            DrawSelection(new[] { Map.Tiles[mx, my].Province }, false);
-            }
-            else
-            {
-                if (tile.HasProvince)
-                    DrawSelection(new[] { tile.Province }, false);
-            }
-        }
-        */
     }
     internal class NationViewer : MapViewer
     {
@@ -209,99 +124,14 @@ namespace FromViewer
                 ? NationColors[nationID]
                 : ColorCalc.TerrainColor(((ProvinceMap)map.Map).Map[id], true);
         }
-        public sealed override void ResetMap()
+        public override sealed void ResetMap()
         {
             map = new NationMap(new ProvinceMap(new TileMap(new GenerateHeight(Width, Height, Torus))));
 
             Selected = new List<Province>();
             NationColors = new Color[map.Tiles.Length];
             for (int n = 0; n < NationColors.Length; n++)
-                NationColors[n] = Color.FromArgb(200 * n % 127 + 90, 500 * n % 127 + 90, 300 * n % 127 + 90);
+                NationColors[n] = Color.FromArgb(202 * n % 200 + 55, 503 * n % 200 + 55, 302 * n % 200 + 55);
         }
-
-
-        /*
-        public void SelectNeighbours()
-        {
-            if (Map.Tiles[x, y].HasProvince)
-                foreach (var p in Map.Tiles[x, y].Province.Neighbours)
-                    SelectProvince(p.Tiles[0]);
-        }
-        public void SelectNewProvince(Tile tile = null)
-        {
-            if (tile == null)
-            {
-                if (Map.Tiles[x, y].HasProvince)
-                {
-                    if (!Selected.Contains(Map.Tiles[x, y].Province))
-                    {
-                        Selected = new List<Province>();
-                        Selected.Add(Map.Tiles[x, y].Province);
-                        DrawSelection();
-                    }
-                }
-            }
-            else
-            if (tile.HasProvince)
-            {
-                if (!Selected.Contains(tile.Province))
-                {
-                    Selected = new List<Province>();
-                    Selected.Add(tile.Province);
-                    DrawSelection();
-                }
-            }
-        }
-        public void SelectProvince(Tile tile = null)
-        {
-            if (tile == null)
-            {
-                if (Map.Tiles[x, y].HasProvince)
-                {
-                    if(!Selected.Contains(Map.Tiles[x, y].Province))
-                    {
-                        Selected.Add(Map.Tiles[x, y].Province);
-                        DrawSelection();
-                    }
-                }
-            }
-            else
-                if (tile.HasProvince)
-                {
-                    if (!Selected.Contains(tile.Province))
-                    {
-                        Selected.Add(tile.Province);
-                        DrawSelection();
-                    }
-                }
-        }
-        public void DrawSelection(Province[] provinces=null, bool selected = true)
-        {
-            if (provinces == null)
-                for (int p = 0; p < Selected.Count; p++)
-                    for (int t = 0; t < Selected[p].Tiles.Length; t++)
-                        DrawTile(graphics, Selected[p].Tiles[t], selected);
-            else
-                for (int p = 0; p < provinces.Length; p++)
-                    for (int t = 0; t < provinces[p].Tiles.Length; t++)
-                        DrawTile(graphics, provinces[p].Tiles[t], selected);
-        }
-        public void UnselectProvince(Tile tile = null)
-        {
-            if (tile == null)
-            {
-                if (!Map.Tiles[mx, my].HasProvince)
-                return;
-            if (Map.Tiles[mx, my].Province.Tiles.Contains(Map.Tiles[x, y]))
-                return;
-            DrawSelection(new[] { Map.Tiles[mx, my].Province }, false);
-            }
-            else
-            {
-                if (tile.HasProvince)
-                    DrawSelection(new[] { tile.Province }, false);
-            }
-        }
-        */
     }
 }
