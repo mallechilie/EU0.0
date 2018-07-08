@@ -31,7 +31,7 @@ namespace FromViewer
         {
             return TerrainColor(tile.Height, shadesOfGray);
         }
-        private static Color MeanColor(Color a, Color b)
+        public static Color MeanColor(Color a, Color b)
         {
             return FromFormula(a, b, (c, d) => (c + d) / 2);
         }

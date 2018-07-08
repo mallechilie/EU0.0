@@ -13,7 +13,7 @@ namespace NewMapBuilder
             Dictionary<int, TBase> freeBases = map.Map.Tiles.ToDictionary(t => t.ID);
             Random r = new Random();
             Dictionary<int, List<TBase>> tiles = new Dictionary<int, List<TBase>>();
-            int tileSize = (int)Math.Sqrt(map.Map.Tiles.Length);
+            int tileSize = (int)Math.Sqrt(map.Map.Tiles.Length)*2;
             for (int counter = 0; freeBases.Count != 0; counter++)
             {
                 int first = freeBases.Keys.ElementAt(r.Next(freeBases.Count));
@@ -33,7 +33,8 @@ namespace NewMapBuilder
                     neighbours.AddRange(neighbours[next].Neighbours
                         .Where(t => freeBases.ContainsKey(t.ID)));
                     neighbours.RemoveAll(t => t.ID == neighbours[next].ID);
-                    if (neighbours.Intersect(tiles[counter]).Count() != 0) ;
+                    // Only use if debugging this part: it makes the program run slow.
+                    //if (neighbours.Intersect(tiles[counter]).Count() != 0) ;
                 }
 
             }
@@ -80,7 +81,7 @@ namespace NewMapBuilder
             where TParent : ITilableWithBase<TParent, TSelf>
         {
             return self.Parent == null ?
-                0 :
+                -1 :
                 self.Parent.ID;
         }
     }

@@ -90,7 +90,9 @@ namespace FromViewer
         {
             int id = x * Height + y;
             return map.Map[id].ParentID<Tile, Province>() != -1
-                ? provinceColors[map.Map[id].ParentID<Tile, Province>()]
+                ? map.Map[id].Neighbours.Any(n => n.Parent != map.Map[id].Parent)
+                ? ColorCalc.MeanColor(ColorCalc.TerrainColor(map.Map[id], true), provinceColors[map.Map[id].ParentID<Tile, Province>()])
+                : provinceColors[map.Map[id].ParentID<Tile, Province>()]
                 : ColorCalc.TerrainColor(map.Map[id], true);
         }
         public override sealed void ResetMap()
@@ -100,7 +102,7 @@ namespace FromViewer
             Selected = new List<Province>();
             provinceColors = new Color[map.Tiles.Length];
             for (int n = 0; n < provinceColors.Length; n++)
-                provinceColors[n] = Color.FromArgb(202 * n % 200 + 55, 503 * n % 200 + 55, 302 * n % 200 + 55);
+                provinceColors[n] = Color.FromArgb(31 * n % 200 + 55, 113 * n % 200 + 55, 67 * n % 200 + 55);
         }
     }
     internal class NationViewer : MapViewer
@@ -117,12 +119,14 @@ namespace FromViewer
         {
             int id = x * Height + y;
             int provinceID = ((ProvinceMap)map.Map).Map[id].ParentID<Tile, Province>();
-            if(provinceID == -1)
+            if(provinceID == -1 )
                 return ColorCalc.TerrainColor(((ProvinceMap)map.Map).Map[id], true);
             int nationID = map.Map[provinceID].ParentID<Province, Nation>();
-            return nationID != -1
-                ? NationColors[nationID]
-                : ColorCalc.TerrainColor(((ProvinceMap)map.Map).Map[id], true);
+            if (nationID == -1)
+                return ColorCalc.TerrainColor(((ProvinceMap) map.Map).Map[id], true);
+            if (((ProvinceMap) map.Map).Map[id].Neighbours.Any(n => n.Parent != ((ProvinceMap) map.Map).Map[id].Parent))
+                return ColorCalc.MeanColor(ColorCalc.TerrainColor(((ProvinceMap) map.Map).Map[id], true), NationColors[nationID]);
+            return  NationColors[nationID];
         }
         public override sealed void ResetMap()
         {
@@ -131,7 +135,7 @@ namespace FromViewer
             Selected = new List<Province>();
             NationColors = new Color[map.Tiles.Length];
             for (int n = 0; n < NationColors.Length; n++)
-                NationColors[n] = Color.FromArgb(202 * n % 200 + 55, 503 * n % 200 + 55, 302 * n % 200 + 55);
+                NationColors[n] = Color.FromArgb(31 * n % 200 + 55, 113 * n % 200 + 55, 67 * n % 200 + 55);
         }
     }
 }

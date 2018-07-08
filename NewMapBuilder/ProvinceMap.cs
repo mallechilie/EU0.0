@@ -21,9 +21,7 @@ namespace NewMapBuilder
             this.map = map;
             //TODO: initialize privinces
             Dictionary<int, List<Tile>> provinces = this.GenerateTileGroup();
-            Tiles = new Province[provinces.Count];
-            for (int i = 0; i < Tiles.Length; i++)
-                Tiles[i] = new Province(provinces[provinces.Keys.ElementAt(i)].ToList(), i);
+            Tiles = provinces.Select((n, i) => new Province(n.Value, i)).ToArray();
             for (int i = 0; i < Tiles.Length; i++)
                 Tiles[i].GetNeighbours(this);
         }

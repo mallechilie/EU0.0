@@ -22,9 +22,7 @@ namespace NewMapBuilder
             this.map = map;
             //TODO: initialize privinces
             Dictionary<int, List<Province>> nations = this.GenerateTileGroup();
-            Tiles = new Nation[nations.Count];
-            for (int i = 0; i < Tiles.Length; i++)
-                Tiles[i] = new Nation(nations[nations.Keys.ElementAt(i)].ToList(), i);
+            Tiles = nations.Select((n, i) => new Nation(n.Value, i)).ToArray();
             for (int i = 0; i < Tiles.Length; i++)
                 Tiles[i].GetNeighbours(this);
         }

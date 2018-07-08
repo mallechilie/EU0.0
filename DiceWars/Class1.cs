@@ -99,12 +99,14 @@ namespace DiceWars
 		{
 			DiceReserve += DicePerTurn;
 			// TODO: fix the typecast, there has to be a better way.
-			for (IEnumerable<Province> unfilledProvinces = Nation.Tiles.Where(p => ((DwProvinceInfo)p.ProvinceInfo).Dice < DiceWars.ForceLimit);
-				unfilledProvinces.Count() > 0 && DiceReserve > 0;
-				unfilledProvinces = Nation.Tiles.Where(p => ((DwProvinceInfo)p.ProvinceInfo).Dice < DiceWars.ForceLimit)) 
+			for (List<Province> unfilledProvinces = Nation.Tiles.Where(p => ((DwProvinceInfo)p.ProvinceInfo).Dice < DiceWars.ForceLimit).ToList();
+				unfilledProvinces.Count > 0 && DiceReserve > 0;
+				)
 			{
-				Province p = unfilledProvinces.ElementAt(DiceWars.R.Next(unfilledProvinces.Count()));
-				((DwProvinceInfo)p.ProvinceInfo).Dice++;
+			    int index = DiceWars.R.Next(unfilledProvinces.Count);
+                Province p = unfilledProvinces[index];
+                if(++((DwProvinceInfo)p.ProvinceInfo).Dice >= DiceWars.ForceLimit)
+                    unfilledProvinces.RemoveAt(index);
 				DiceReserve--;
 			}
 		}
