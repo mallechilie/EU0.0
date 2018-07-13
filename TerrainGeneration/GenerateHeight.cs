@@ -32,20 +32,65 @@ namespace TerrainGeneration
         /// </summary>
         /// <param name="width">The width of the map.</param>
         /// <param name="height">The height of the map.</param>
+        /// <param name="torus">Indicates if this heightmap is on a torridal plane (is wrap-around).</param>
         /// <param name="delta">A value between 0 and 1 that indicates the steepness: 0 is flat and 1 steep.</param>
-        public GenerateHeight(int width, int height, float delta = 0.5f)
+        public GenerateHeight(int width, int height, bool torus, float delta = 0.5f, int distance = 0)
         {
             this.delta = delta;
-            Cs = new SquareCoordinateSystem(width, height);
+            Cs = new SquareCoordinateSystem(width, height, torus);
             deviation = delta;
             HeightMap = new float[width, height];
             // ReSharper disable once PossibleLossOfFraction
-            distance = (int)Math.Pow(2, (int)Math.Log(Math.Min(width, height), 2) / 2);
-            GenerateHeights();
+            this.distance = distance == 0 ? (int) Math.Pow(2, (int) Math.Log(Math.Min(width, height), 2) / 2) : distance;
+
+            if (torus)
+                CopyHeight(width, height);
+            else
+                GenerateHeights();
+            
             CompensateMean();
             Round();
         }
 
+        private void CopyHeight(int width, int height)
+        {
+            GenerateHeight gh = new GenerateHeight(width + distance * 2, height + 2 * distance, false, delta, distance);
+            for (int x = 0; x < HeightMap.GetLength(0); x++)
+            {
+                for (int y = 0; y < HeightMap.GetLength(1); y++)
+                {
+                    HeightMap[x, y] = gh.HeightMap[x + distance, y + distance];
+
+                    if (x < distance)
+                    {
+                        float weight = (float) (x + distance) / (2 * distance);
+                        HeightMap[x, y] *= weight;
+                        HeightMap[x, y] += gh.HeightMap[x + distance + HeightMap.GetLength(0), y + distance] * (1 - weight);
+                    }
+
+                    if (x > HeightMap.GetLength(0) - distance)
+                    {
+                        float weight = (float) (HeightMap.GetLength(0) - x + distance) / (2 * distance);
+                        HeightMap[x, y] *= weight;
+                        HeightMap[x, y] += gh.HeightMap[x + distance - HeightMap.GetLength(0), y + distance] * (1 - weight);
+                    }
+
+                    if (y < distance)
+                    {
+                        float weight = (float)(y + distance) / (2 * distance);
+                        HeightMap[x, y] *= weight;
+                        HeightMap[x, y] += gh.HeightMap[x + distance, y + distance + HeightMap.GetLength(1)] * (1 - weight);
+                    }
+
+                    if (y > HeightMap.GetLength(1) - distance)
+                    {
+                        float weight = (float)(HeightMap.GetLength(1) - y + distance) / (2 * distance);
+                        HeightMap[x, y] *= weight;
+                        HeightMap[x, y] += gh.HeightMap[x + distance, y + distance - HeightMap.GetLength(1)] * (1 - weight);
+                    }
+                }
+            }
+        }
 
         private void CompensateMean(int minimum = 0, int maximum = 255)
         {

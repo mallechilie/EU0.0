@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 using NewMapBuilder;
 using TerrainGeneration;
 using Enumeration;
@@ -12,14 +13,15 @@ namespace FromViewer
     {
         public int Width, Height;
         public readonly TileShape TileTopology;
-        public readonly bool Torus = true;
+        public readonly bool Torus;
 
 
-        protected MapViewer(int width, int height, TileShape tileTopology)
+        protected MapViewer(int width, int height, TileShape tileTopology, bool torus)
         {
             Width = width;
             Height = height;
             TileTopology = tileTopology;
+            Torus = torus;
             ResetMap();
         }
 
@@ -40,7 +42,7 @@ namespace FromViewer
         private GenerateHeight heightMap;
 
 
-        public TerrainViewer(int width, int height) : base(width, height, TileShape.Square)
+        public TerrainViewer(int width, int height, bool torus) : base(width, height, TileShape.Square, torus)
         {
         }
 
@@ -51,7 +53,7 @@ namespace FromViewer
         }
         public override void ResetMap()
         {
-            heightMap = new GenerateHeight(Width, Height);
+            heightMap = new GenerateHeight(Width, Height, Torus);
         }
     }
     internal class WaterViewer : MapViewer
@@ -59,18 +61,18 @@ namespace FromViewer
         private GenerateWater waterMap;
 
 
-        public WaterViewer(int width, int height) : base(width, height, TileShape.Square)
+        public WaterViewer(int width, int height, bool torus) : base(width, height, TileShape.Square, torus)
         {
         }
 
 
         public override Color GetColor(int x, int y)
         {
-            return ColorCalc.TerrainColor(waterMap.heightMap.HeightMap[x, y], waterMap.waterHeights[x, y], true);
+            return ColorCalc.TerrainColor(waterMap.HeightMap.HeightMap[x, y], waterMap.WaterHeights[x, y], true);
         }
         public override void ResetMap()
         {
-            waterMap = new GenerateWater(new GenerateHeight(Width, Height));
+            waterMap = new GenerateWater(new GenerateHeight(Width, Height, Torus));
         }
     }
 
@@ -80,7 +82,7 @@ namespace FromViewer
         public List<Province> Selected;
         private Color[] provinceColors;
 
-        public ProvinceViewer(int width, int height) : base(width, height, TileShape.Square)
+        public ProvinceViewer(int width, int height, bool torus) : base(width, height, TileShape.Square, torus)
         {
         }
 
@@ -93,7 +95,7 @@ namespace FromViewer
         }
         public sealed override void ResetMap()
         {
-            map = new ProvinceMap(new TileMap(new GenerateHeight(Width, Height)));
+            map = new ProvinceMap(new TileMap(new GenerateHeight(Width, Height, Torus)));
 
             Selected = new List<Province>();
             provinceColors = new Color[map.Tiles.Length];
@@ -192,7 +194,7 @@ namespace FromViewer
         public List<Province> Selected;
         private Color[] NationColors;
 
-        public NationViewer(int width, int height) : base(width, height, TileShape.Square)
+        public NationViewer(int width, int height, bool torus) : base(width, height, TileShape.Square, torus)
         {
         }
 
@@ -209,7 +211,7 @@ namespace FromViewer
         }
         public sealed override void ResetMap()
         {
-            map = new NationMap(new ProvinceMap(new TileMap(new GenerateHeight(Width, Height))));
+            map = new NationMap(new ProvinceMap(new TileMap(new GenerateHeight(Width, Height, Torus))));
 
             Selected = new List<Province>();
             NationColors = new Color[map.Tiles.Length];

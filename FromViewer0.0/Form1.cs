@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Enumeration;
 
 namespace FromViewer
 {
@@ -12,7 +11,7 @@ namespace FromViewer
         private int x, y;
         private readonly MapViewer map;
         private readonly bool resizable;
-        public bool wrapAround;
+        private bool wrapAround;
 
         public Viewer(MapViewer map, bool resizable = true)
         {
@@ -70,7 +69,6 @@ namespace FromViewer
                 return;
         }
         
-
         private void DrawTiles()
         {
             Bitmap bitmap = map.GetBitmap();
@@ -91,30 +89,7 @@ namespace FromViewer
                 graphics.FillRectangle(back, new RectangleF(0, 0, ClientSize.Width, rect.Y));
                 graphics.FillRectangle(back, new RectangleF(0, rect.Y + rect.Height, ClientSize.Width, ClientSize.Height));
             }
-
-            return;
-            for (int x = 0; x < map.Width; x++)
-                for (int y = 0; y < map.Height; y++)
-                    DrawTile(x, y, map.GetColor(x, y));
         }
-
-        private void DrawTile(int x, int y, Color color)
-        {
-            switch (map.TileTopology)
-            {
-                case TileShape.Square:
-                    {
-                        Rectangle rect = new Rectangle((int)((float)ClientSize.Width / (map.Width + 1) * x),
-                            (int)((float)ClientSize.Height / (map.Height + 1) * y),
-                            (int)((float)ClientSize.Width / (map.Width + 1)) + 1,
-                            (int)((float)ClientSize.Height / (map.Height + 1)) + 1);
-                        //graphics.DrawRectangle(Pens.Black, rect);
-                        graphics.FillRectangle(new SolidBrush(color), rect);
-                    }
-                    break;
-            }
-        }
-
 
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
