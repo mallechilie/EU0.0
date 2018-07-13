@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Enumeration;
 
 namespace TerrainGeneration
@@ -13,8 +14,8 @@ namespace TerrainGeneration
 		protected CoordinateSystem(int width, int height, Shape topology, bool torus)
 		{
 		    Torus = torus;
-			this.Width = width;
-			this.Height = height;
+            Width = width;
+            Height = height;
 			Topology = topology;
 		}
 
@@ -35,6 +36,20 @@ namespace TerrainGeneration
 		        coordinates = coordinates.Select(c => new Coordinate((c.X + Width) % Width, (c.Y + Height) % Height)).ToArray();
 			return coordinates.Where(cc => cc.X >= 0 && cc.Y >= 0 && cc.X < Width && cc.Y < Height).ToArray();
 		}
+        public Coordinate TrimCoordinate(Coordinate coordinate)
+        {
+            switch (Topology)
+            {
+                case Shape.Square:
+                    return new Coordinate(Math.Min(Width-1, Math.Max(0, coordinate.X)), Math.Min(Height-1, Math.Max(0, coordinate.Y)));
+                case Shape.Cilinder:
+                case Shape.Sphere:
+                    return new Coordinate((coordinate.X + Width) % Width, Math.Min(Height-1, Math.Max(0, coordinate.Y)));
+                case Shape.Torus:
+                default:
+                    return new Coordinate((coordinate.X + Width) % Width, (coordinate.Y + Height) % Height);
+            }
+        }
 		public override string ToString()
 		{
 			return $"{Width}, {Height}, {Topology}";

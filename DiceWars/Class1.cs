@@ -41,12 +41,13 @@ namespace DiceWars
 			double a4 = -1.453152027;
 			double a5 = 1.061405429;
 			double p = 0.3275911;
+		    double sqrt2 = 1.41421356237;
 
 			// Save the sign of x
 			int sign = 1;
 			if (x < 0)
 				sign = -1;
-			x = Math.Abs(x) / Math.Sqrt(2.0);
+		    x = Math.Abs(x) / sqrt2;
 
 			// A&S formula 7.1.26
 			double t = 1.0 / (1.0 + p * x);
