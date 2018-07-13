@@ -53,7 +53,7 @@ namespace FromViewer
         }
         public override void ResetMap()
         {
-            heightMap = new GenerateHeight(Width, Height);
+            heightMap = new GenerateHeight(Width, Height, Torus);
         }
     }
     internal class WaterViewer : MapViewer
@@ -61,14 +61,14 @@ namespace FromViewer
         private GenerateWater waterMap;
 
 
-        public WaterViewer(int width, int height) : base(width, height, TileShape.Square)
+        public WaterViewer(int width, int height, bool torus) : base(width, height, TileShape.Square, torus)
         {
         }
 
 
         public override Color GetColor(int x, int y)
         {
-            return ColorCalc.TerrainColor(waterMap.heightMap.HeightMap[x, y], waterMap.waterHeights[x, y], true);
+            return ColorCalc.TerrainColor(waterMap.HeightMap.HeightMap[x, y], waterMap.WaterHeights[x, y], true);
         }
         public override void ResetMap()
         {
