@@ -9,12 +9,10 @@ namespace TerrainGeneration
 	{
 		public readonly Shape Topology;
 		public readonly int Width, Height;
-	    public bool Torus;
 
-		protected CoordinateSystem(int width, int height, Shape topology, bool torus)
+	    protected CoordinateSystem(int width, int height, Shape topology)
 		{
-		    Torus = torus;
-            Width = width;
+		    Width = width;
             Height = height;
 			Topology = topology;
 		}
@@ -32,7 +30,7 @@ namespace TerrainGeneration
         public abstract Coordinate[] GetDistancedNeighbours(int x, int y, bool even, int distance);
 		protected Coordinate[] TrimNeighbours(Coordinate[] coordinates)
 		{
-		    if (Torus)
+		    if (Topology == Shape.Torus)
 		        coordinates = coordinates.Select(c => new Coordinate((c.X + Width) % Width, (c.Y + Height) % Height)).ToArray();
 			return coordinates.Where(cc => cc.X >= 0 && cc.Y >= 0 && cc.X < Width && cc.Y < Height).ToArray();
 		}
@@ -58,7 +56,7 @@ namespace TerrainGeneration
 
 	public class SquareCoordinateSystem : CoordinateSystem
 	{
-		public SquareCoordinateSystem(int width, int height, bool torus) : base(width, height, Shape.Square, torus)
+	    public SquareCoordinateSystem(int width, int height, bool torus) : base(width, height, torus ? Shape.Torus : Shape.Square)
 		{
 		}
 

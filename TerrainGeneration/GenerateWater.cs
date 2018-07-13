@@ -4,22 +4,23 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Superbest_random;
 
 namespace TerrainGeneration
 {
     public class GenerateWater
     {
-        public GenerateHeight heightMap;
-        private CoordinateSystem CoordinateSystem => heightMap.Cs;
-        public float[,] waterHeights;
+        public GenerateHeight HeightMap;
+        private CoordinateSystem CoordinateSystem => HeightMap.Cs;
+        public float[,] WaterHeights;
         private Vector[,] velocities;
 
         public GenerateWater(GenerateHeight heightMap)
         {
-            this.heightMap = heightMap;
-            waterHeights = new float[CoordinateSystem.Width, CoordinateSystem.Height];
+            HeightMap = heightMap;
+            WaterHeights = new float[CoordinateSystem.Width, CoordinateSystem.Height];
             velocities = new Vector[CoordinateSystem.Width, CoordinateSystem.Height];
-            StartingWater(10, 2);
+            StartingWater((float)new Random().NextGaussian(10, 3), 2);
             for (int x = 0; x < 50; x++)
                 IterateWaterAccelerate();
         }
@@ -35,7 +36,7 @@ namespace TerrainGeneration
                 Random r = new Random();
                 for (int x = 0; x < WaterHeights.GetLength(0); x++)
                     for (int y = 0; y < WaterHeights.GetLength(1); y++)
-                        WaterHeights[x, y] = (float)Superbest_random.RandomExtensions.NextGaussian(r, amount, deviation);
+                        WaterHeights[x, y] = (float)r.NextGaussian(amount, deviation);
             }
         }
 
@@ -49,14 +50,14 @@ namespace TerrainGeneration
                     foreach (KeyValuePair<Coordinate, float> keyValuePair in neighbourWater)
                         newWater[keyValuePair.Key.X, keyValuePair.Key.Y] += keyValuePair.Value;
                 }
-            waterHeights = newWater;
+            WaterHeights = newWater;
         }
         private void IterateWaterAccelerate()
         {
             float[,] newWater = new float[CoordinateSystem.Width, CoordinateSystem.Height];
             Vector[,] newVelocities = new Vector[CoordinateSystem.Width, CoordinateSystem.Height];
-            for (int x = 0; x < waterHeights.GetLength(0); x++)
-                for (int y = 0; y < waterHeights.GetLength(1); y++)
+            for (int x = 0; x < WaterHeights.GetLength(0); x++)
+                for (int y = 0; y < WaterHeights.GetLength(1); y++)
                 {
                     Vector velocity = IterateWaterAccelerateTile(x, y, CoordinateSystem.GetNeightbours(x, y));
                     //TODO: implement max velocity.
@@ -71,15 +72,15 @@ namespace TerrainGeneration
                         Coordinate w = CoordinateSystem.TrimCoordinate(new Coordinate(v.X + i % 2, v.Y + i / 2));
                         if (Math.Abs(c) > float.Epsilon * 100)
                         {
-                            newWater[w.X, w.Y] += waterHeights[x, y] * c;
-                            newVelocities[w.X, w.Y] += waterHeights[w.X, w.Y] * velocity * c;
+                            newWater[w.X, w.Y] += WaterHeights[x, y] * c;
+                            newVelocities[w.X, w.Y] += WaterHeights[w.X, w.Y] * velocity * c;
                         }
                     }
                 }
-            for (int x = 0; x < waterHeights.GetLength(0); x++)
-                for (int y = 0; y < waterHeights.GetLength(1); y++)
-                    newVelocities[x, y] /= newWater[x, y];
-            waterHeights = newWater;
+            for (int x = 0; x < WaterHeights.GetLength(0); x++)
+                for (int y = 0; y < WaterHeights.GetLength(1); y++)
+                    newVelocities[x, y] /= newWater[x, y]+1;
+            WaterHeights = newWater;
             velocities = newVelocities;
         }
 
@@ -115,13 +116,18 @@ namespace TerrainGeneration
         }
         private Vector IterateWaterAccelerateTile(int x, int y, Coordinate[] neighbours)
         {
-            float leftSum = neighbours.Where(coordinate => coordinate.X != x + 1).Sum(coordinate => heightMap.HeightMap[coordinate.X, coordinate.Y] + waterHeights[coordinate.X, coordinate.Y]);
-            float rightSum = neighbours.Where(coordinate => coordinate.X != x - 1).Sum(coordinate => heightMap.HeightMap[coordinate.X, coordinate.Y] + waterHeights[coordinate.X, coordinate.Y]);
-            float upperSum = neighbours.Where(coordinate => coordinate.Y != y + 1).Sum(coordinate => heightMap.HeightMap[coordinate.X, coordinate.Y] + waterHeights[coordinate.X, coordinate.Y]);
-            float lowerSum = neighbours.Where(coordinate => coordinate.Y != y - 1).Sum(coordinate => heightMap.HeightMap[coordinate.X, coordinate.Y] + waterHeights[coordinate.X, coordinate.Y]);
+            float total = neighbours.Sum(coordinate => HeightMap.HeightMap[coordinate.X, coordinate.Y] + WaterHeights[coordinate.X, coordinate.Y]) + 1;
+            float leftSum = neighbours.Where(coordinate => coordinate.X != (x + 1 + CoordinateSystem.Width) % CoordinateSystem.Width)
+                                      .Sum(coordinate => HeightMap.HeightMap[coordinate.X, coordinate.Y] + WaterHeights[coordinate.X, coordinate.Y]);
+            float rightSum = neighbours.Where(coordinate => coordinate.X != (x - 1 + CoordinateSystem.Width) % CoordinateSystem.Width)
+                                       .Sum(coordinate => HeightMap.HeightMap[coordinate.X, coordinate.Y] + WaterHeights[coordinate.X, coordinate.Y]);
+            float upperSum = neighbours.Where(coordinate => coordinate.Y != (y + 1 + CoordinateSystem.Height) % CoordinateSystem.Height)
+                                       .Sum(coordinate => HeightMap.HeightMap[coordinate.X, coordinate.Y] + WaterHeights[coordinate.X, coordinate.Y]);
+            float lowerSum = neighbours.Where(coordinate => coordinate.Y != (y - 1 + CoordinateSystem.Height) % CoordinateSystem.Height)
+                                       .Sum(coordinate => HeightMap.HeightMap[coordinate.X, coordinate.Y] + WaterHeights[coordinate.X, coordinate.Y]);
             Vector acceleration = new Vector(leftSum - rightSum, upperSum - lowerSum);
 
-            return velocities[x, y] * 0.9f + acceleration / waterHeights[x, y];
+            return velocities[x, y] * 0.9f + acceleration / total * 10;
         }
     }
 
