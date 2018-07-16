@@ -20,9 +20,10 @@ namespace TerrainGeneration
             HeightMap = heightMap;
             WaterHeights = new float[CoordinateSystem.Width, CoordinateSystem.Height];
             velocities = new Vector[CoordinateSystem.Width, CoordinateSystem.Height];
-            StartingWater((float)new Random().NextGaussian(10, 3), 2);
-            for (int x = 0; x < 50; x++)
-                IterateWaterAccelerate();
+            StartingWater((float)new Random().NextGaussian(10, 4), 2);
+            GenerateWaterOneLevel();
+            //for (int x = 0; x < 50; x++)
+            //    IterateWaterAccelerate();
         }
 
         private void StartingWater(float amount, float deviation = 0)
@@ -79,9 +80,18 @@ namespace TerrainGeneration
                 }
             for (int x = 0; x < WaterHeights.GetLength(0); x++)
                 for (int y = 0; y < WaterHeights.GetLength(1); y++)
-                    newVelocities[x, y] /= newWater[x, y]+1;
+                    newVelocities[x, y] /= newWater[x, y] + 1;
             WaterHeights = newWater;
             velocities = newVelocities;
+        }
+        private void GenerateWaterOneLevel()
+        {
+            float avarageHeight = HeightMap.HeightMap.Cast<float>().Sum() / HeightMap.HeightMap.Length;
+            float avarageWater = WaterHeights.Cast<float>().Sum() / WaterHeights.Length;
+            float avarage = avarageHeight + avarageWater;
+            for (int x = 0; x < WaterHeights.GetLength(0); x++)
+                for (int y = 0; y < WaterHeights.GetLength(1); y++)
+                    WaterHeights[x, y] = Math.Max(0, avarage - HeightMap.HeightMap[x, y]);
         }
 
         private Dictionary<Coordinate, float> IterateWaterFillTile(int x, int y, Coordinate[] neighbours)
@@ -127,7 +137,7 @@ namespace TerrainGeneration
                                        .Sum(coordinate => HeightMap.HeightMap[coordinate.X, coordinate.Y] + WaterHeights[coordinate.X, coordinate.Y]);
             Vector acceleration = new Vector(leftSum - rightSum, upperSum - lowerSum);
 
-            return velocities[x, y] * 0.9f + acceleration / total * 10;
+            return velocities[x, y] * 0.9f + acceleration / total * neighbours.Length;
         }
     }
 
