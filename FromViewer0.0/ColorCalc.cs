@@ -21,10 +21,10 @@ namespace FromViewer
             //return colors[(int)index];
             return MeanColor(colors[(int)index], colors[(int)index + 1], 1 - (index - (int)index), index - (int)index);
         }
-        public static Color TerrainColor(float height, float WaterHeight, bool shadesOfGray = false)
+        public static Color TerrainColor(float height, float waterHeight, bool shadesOfGray = false)
         {
             Color baseColor = TerrainColor(height, shadesOfGray);
-            Color water = Color.FromArgb(0, 0, (int) WaterHeight);
+            Color water = Color.FromArgb(0, 0, (int) waterHeight);
             return FromFormula(baseColor, water, (c, d) => c + d);
         }
         public static Color TerrainColor(Tile tile, bool shadesOfGray = false)

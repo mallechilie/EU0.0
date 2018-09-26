@@ -12,6 +12,9 @@ namespace FromViewer
         private readonly MapViewer map;
         private readonly bool resizable;
         private bool wrapAround;
+        private SplitContainer splitContainer;
+        public Panel ViewPanel => splitContainer.Panel1;
+        public Panel ControlPanel => splitContainer.Panel2;
 
         public Viewer(MapViewer map, bool resizable = true)
         {
@@ -19,13 +22,34 @@ namespace FromViewer
             this.map = map;
             wrapAround = map.Torus;
             this.resizable = resizable;
-            controller = new ViewController(new RectangleF(0, 0, ClientSize.Width, ClientSize.Height), 
-                new PointF(ClientSize.Width/2f, ClientSize.Height/2f));
+
             InitializeComponent();
+            ShowSplitContainer();
+            controller = new ViewController(new RectangleF(0, 0, ViewPanel.Width, ViewPanel.Height),
+                                            new PointF(ViewPanel.Width / 2f, ViewPanel.Height / 2f));
+            //controller = new ViewController(new RectangleF(0, 0, ClientSize.Width, ClientSize.Height),
+            //                                new PointF(ClientSize.Width / 2f, ClientSize.Height / 2f));
             MouseMove += DrawMouse;
             MouseWheel += controller.Zoom;
             MouseWheel += (sender, args) => { Draw(); };
-            graphics = CreateGraphics();
+
+
+            graphics = ViewPanel.CreateGraphics();
+        }
+
+        public void ShowSplitContainer()
+        {
+            splitContainer = new SplitContainer
+            {
+                Size = ClientSize,
+                Dock = DockStyle.Fill,
+                Parent = this,
+                IsSplitterFixed = true,
+                FixedPanel = FixedPanel.Panel2
+            };
+
+            Controls.Add(splitContainer);
+            //splitContainer.Controls.Add(button1);
         }
 
 
@@ -35,7 +59,7 @@ namespace FromViewer
             {
                 map.Width = ClientSize.Width;
                 map.Height = ClientSize.Height;
-                graphics = CreateGraphics();
+                graphics = ViewPanel.CreateGraphics();
             }
             map?.ResetMap();
             controller.Rectangle = new RectangleF(0, 0, ClientSize.Width, ClientSize.Height);
@@ -43,11 +67,11 @@ namespace FromViewer
         }
         protected override void OnResize(EventArgs e)
         {
-            graphics = CreateGraphics();
+            graphics = ViewPanel.CreateGraphics();
             base.OnResize(e);
             RectangleF rect = controller.Rectangle;
-            controller.Rectangle = new RectangleF(rect.X, rect.Y, Width * controller.ZoomFactor, Height * controller.ZoomFactor);
-            controller.Center = new PointF(ClientSize.Width / 2f, ClientSize.Height / 2f);
+            controller.Rectangle = new RectangleF(rect.X, rect.Y, ViewPanel.Width * controller.ZoomFactor, ViewPanel.Height * controller.ZoomFactor);
+            controller.Center = new PointF(ViewPanel.Width / 2f, ViewPanel.Height / 2f);
         }
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -118,6 +142,11 @@ namespace FromViewer
             if (changed)
                 Draw();
             return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void Viewer_Load(object sender, EventArgs e)
+        {
+
         }
 
         private void button1_Click(object sender, EventArgs e)

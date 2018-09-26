@@ -209,7 +209,7 @@ namespace FromViewer
     {
         private NationMap map;
         public List<Province> Selected;
-        private Color[] NationColors;
+        private Color[] nationColors;
 
         public NationViewer(int width, int height, bool torus) : base(width, height, TileShape.Square, torus)
         {
@@ -223,7 +223,7 @@ namespace FromViewer
                 return ColorCalc.TerrainColor(((ProvinceMap)map.Map).Map[id], true);
             int nationID = map.Map[provinceID].ParentID;
             return nationID != -1
-                ? NationColors[nationID]
+                ? nationColors[nationID]
                 : ColorCalc.TerrainColor(((ProvinceMap)map.Map).Map[id], true);
         }
         public sealed override void ResetMap()
@@ -231,9 +231,9 @@ namespace FromViewer
             map = new NationMap(new ProvinceMap(new TileMap(new GenerateHeight(Width, Height, Torus))));
 
             Selected = new List<Province>();
-            NationColors = new Color[map.Tiles.Length];
-            for (int n = 0; n < NationColors.Length; n++)
-                NationColors[n] = Color.FromArgb(200 * n % 127 + 90, 500 * n % 127 + 90, 300 * n % 127 + 90);
+            nationColors = new Color[map.Tiles.Length];
+            for (int n = 0; n < nationColors.Length; n++)
+                nationColors[n] = Color.FromArgb(200 * n % 127 + 90, 500 * n % 127 + 90, 300 * n % 127 + 90);
         }
 
 
