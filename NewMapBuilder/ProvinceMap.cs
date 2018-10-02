@@ -20,7 +20,7 @@ namespace NewMapBuilder
         {
             this.map = map;
             //TODO: initialize privinces
-            Dictionary<int, List<Tile>> provinces = this.GenerateTileGroup();
+            Dictionary<int, List<Tile>> provinces = this.GenerateTileGroup(t => t.WaterHeight <= 0.0001);
             Tiles = new Province[provinces.Count];
             for (int i = 0; i < Tiles.Length; i++)
                 Tiles[i] = new Province(provinces[provinces.Keys.ElementAt(i)].ToArray(), i);

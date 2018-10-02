@@ -6,11 +6,14 @@ namespace NewMapBuilder
 {
     public static class MapExtentions
     {
-        public static Dictionary<int, List<TBase>> GenerateTileGroup<TTile, TBase>(this ITileMapWithBase<TTile, TBase> map)
+        public static Dictionary<int, List<TBase>> GenerateTileGroup<TTile, TBase>(this ITileMapWithBase<TTile, TBase> map, Func<TBase, bool> filter = null)
             where TTile : ITilableWithBase<TTile, TBase>
             where TBase : ITilable<TBase>
         {
-            Dictionary<int, TBase> freeBases = map.Map.Tiles.ToDictionary(t => t.ID);
+            Dictionary<int, TBase> freeBases = filter == null 
+                                            ? map.Map.Tiles.ToDictionary(t => t.ID) 
+                                            : map.Map.Tiles.Where(filter).ToDictionary(t => t.ID);
+            IEnumerable<TBase> filteredTiles = map.Map.Tiles.Where(t => !filter(t));
             Random r = new Random();
             Dictionary<int, List<TBase>> tiles = new Dictionary<int, List<TBase>>();
             int tileSize = (int)Math.Sqrt(map.Map.Tiles.Length);

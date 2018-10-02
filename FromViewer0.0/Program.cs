@@ -6,7 +6,7 @@ namespace FromViewer
 {
     internal static class Program
     {
-        private static int size = 10;
+        private static int size = 100;
 
 
         /// <summary>
@@ -17,7 +17,7 @@ namespace FromViewer
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Viewer(new WaterViewer(size, size, true)));
+            Application.Run(new Viewer(new ProvinceViewer(size, size, true)));
         }
     }
 }

@@ -106,13 +106,30 @@ namespace FromViewer
         public override Color GetColor(int x, int y)
         {
             int id = x * Height + y;
-            return map.Map[id].ParentID != -1
-                ? provinceColors[map.Map[id].ParentID]
-                : ColorCalc.TerrainColor(map.Map[id], true);
+            if(map.Map[id].ParentID != -1)
+                return provinceColors[map.Map[id].ParentID];
+            double waterHeigt = map.Map.Tiles[id].WaterHeight;
+            switch ((int)waterHeigt / 15)
+            {
+                case 0:
+                    return ColorCalc.TerrainColor(map.Map[id], true);
+                case 1:
+                    return Color.Aquamarine;
+                case 2:
+                    return Color.Aqua;
+                case 3:
+                    return Color.DeepSkyBlue;
+                case 4:
+                    return Color.Blue;
+                case 5:
+                    return Color.DarkBlue;
+                default:
+                    return Color.MidnightBlue;
+            }
         }
         public sealed override void ResetMap()
         {
-            map = new ProvinceMap(new TileMap(new GenerateHeight(Width, Height, Torus)));
+            map = new ProvinceMap(new TileMap(new GenerateWater(new GenerateHeight(Width, Height, Torus))));
 
             Selected = new List<Province>();
             provinceColors = new Color[map.Tiles.Length];

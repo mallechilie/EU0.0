@@ -4,7 +4,7 @@ namespace NewMapBuilder
 {
     public class Tile : ITilableWithParent<Tile>
     {
-        public Tile(int x, int y, float height, CoordinateSystem coordinateSystem, TileMap tileMap)
+        public Tile(int x, int y, float height, CoordinateSystem coordinateSystem, TileMap tileMap, double waterHeight = 0)
         {
             ParentID = -1;
             this.x = x;
@@ -13,12 +13,13 @@ namespace NewMapBuilder
             Height = height;
             ID = x * coordinateSystem.Height + y;
             neighbours = coordinateSystem.GetDirectNeightbours(x, y);
+            WaterHeight = waterHeight;
         }
 
         private readonly int x, y;
         private readonly Coordinate[] neighbours;
         private readonly TileMap tileMap;
-        public readonly double WaterHeight = 0;
+        public readonly double WaterHeight;
         public readonly float Height;
         public int ID
         {
